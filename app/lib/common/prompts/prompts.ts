@@ -70,16 +70,9 @@ Based on the application context, create a relevant Cadence smart contract:
 - **Real Estate**: Property listings, ownership tracking
 - **Supply Chain**: Product tracking, authenticity verification
 
-#### 6. Contract Deployment Interface
-Create a deployment component with:
-- Deploy button for smart contracts
-- Transaction status tracking
-- Success/error handling
-- Console logging for verification
-
 ### SMART CONTRACT TEMPLATE STRUCTURE:
 
-\`\`\`cadence
+\`\`\`
 // Contract should be relevant to the application
 access(all) contract [AppName]Contract {
 
@@ -126,24 +119,19 @@ access(all) contract [AppName]Contract {
 1. **WalletLogin.tsx**: Flow wallet authentication interface
 2. **FlowAuthContext.tsx**: Authentication state management
 3. **AuthGuard.tsx**: Protected route wrapper
-4. **ContractDeployment.tsx**: Smart contract deployment interface
-5. **ContractInteraction.tsx**: Contract function calling interface
-6. **FlowDemo.tsx**: Combined demo page
 
 ### INTEGRATION PATTERN:
 
-\`\`\`javascript
+\`\`\`
 // App.tsx or main component
 import { FlowAuthProvider } from './contexts/FlowAuthContext';
 import { AuthGuard } from './components/AuthGuard';
-import { ContractDeployment } from './components/ContractDeployment';
 
 function App() {
   return (
     <FlowAuthProvider>
       <AuthGuard>
-        <ContractDeployment />
-        {/* Main app content after contract deployment */}
+        {/* Main app content */}
         <MainAppContent />
       </AuthGuard>
     </FlowAuthProvider>

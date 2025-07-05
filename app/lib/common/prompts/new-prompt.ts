@@ -120,9 +120,6 @@ access(all) contract [AppName]Contract {
 1. **WalletLogin.tsx**: Flow wallet authentication interface
 2. **FlowAuthContext.tsx**: Authentication state management
 3. **AuthGuard.tsx**: Protected route wrapper
-4. **ContractDeployment.tsx**: Smart contract deployment interface
-5. **ContractInteraction.tsx**: Contract function calling interface
-6. **FlowDemo.tsx**: Combined demo page
 
 ### INTEGRATION PATTERN:
 
@@ -130,14 +127,12 @@ access(all) contract [AppName]Contract {
 // App.tsx or main component
 import { FlowAuthProvider } from './contexts/FlowAuthContext';
 import { AuthGuard } from './components/AuthGuard';
-import { ContractDeployment } from './components/ContractDeployment';
 
 function App() {
   return (
     <FlowAuthProvider>
       <AuthGuard>
-        <ContractDeployment />
-        {/* Main app content after contract deployment */}
+        {/* Main app content */}
         <MainAppContent />
       </AuthGuard>
     </FlowAuthProvider>
@@ -664,129 +659,9 @@ export const WalletLogin = () => {
   );
 };
 </cosmiqAction>
-<cosmiqAction type="file" filePath="src/components/flow/ContractDeployment.jsx">
-import { useState } from 'react';
-import { useFlowAuth } from '../../contexts/FlowAuthContext';
-import * as fcl from '@onflow/fcl';
-
-export const ContractDeployment = ({ onDeploymentComplete }) => {
-  const { user } = useFlowAuth();
-  const [isDeploying, setIsDeploying] = useState(false);
-  const [deploymentResult, setDeploymentResult] = useState(null);
-  const [error, setError] = useState(null);
-
-  const deployContract = async () => {
-    setIsDeploying(true);
-    setError(null);
-
-    try {
-      const CONTRACT_CODE =
-        access(all) contract TodoContract {
-          access(all) var todos: {UInt64: String}
-          access(all) var nextTodoId: UInt64
-
-          init() {
-            self.todos = {}
-            self.nextTodoId = 1
-            log("✅ TodoContract deployed successfully")
-          }
-
-          access(all) fun createTodo(title: String): UInt64 {
-            self.todos[self.nextTodoId] = title
-            let id = self.nextTodoId
-            self.nextTodoId = self.nextTodoId + 1
-            log("📝 Todo created: ".concat(title))
-            return id
-          }
-
-          access(all) fun getTodos(): {UInt64: String} {
-            return self.todos
-          }
-        }
-      ;
-
-      const deploymentTransaction =
-        transaction(code: String) {
-          prepare(signer: auth(AddContract) &Account) {
-            signer.contracts.add(
-              name: "TodoContract",
-              code: code.decodeHex()
-            )
-          }
-        }
-      ;
-
-      const transactionId = await fcl.mutate({
-        cadence: deploymentTransaction,
-        args: (arg, t) => [
-          arg(Buffer.from(CONTRACT_CODE).toString('hex'), t.String)
-        ],
-        proposer: fcl.currentUser,
-        payer: fcl.currentUser,
-        authorizations: [fcl.currentUser],
-        limit: 1000
-      });
-
-      console.log('🚀 Contract deployment transaction sent:', transactionId);
-
-      const result = await fcl.tx(transactionId).onceSealed();
-      console.log('✅ Contract deployment completed:', result);
-
-      setDeploymentResult(result);
-      if (onDeploymentComplete) {
-        onDeploymentComplete();
-      }
-    } catch (err) {
-      console.error('❌ Contract deployment failed:', err);
-      setError(err.message);
-    } finally {
-      setIsDeploying(false);
-    }
-  };
-
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">📦 Deploy Smart Contract</h2>
-      <p className="text-gray-600 mb-6">
-        Deploy the TodoContract to the Flow blockchain to start managing your decentralized todos.
-      </p>
-
-      {!deploymentResult ? (
-        <button
-          onClick={deployContract}
-          disabled={isDeploying}
-          className={'w-full py-3 px-6 rounded-lg font-semibold transition duration-200 {
-            isDeploying
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700 text-white hover:scale-105'
-          }'}
-        >
-          {isDeploying ? 'Deploying Contract...' : 'Deploy TodoContract'}
-        </button>
-      ) : (
-        <div className="text-center">
-          <div className="text-green-600 text-lg font-semibold mb-2">
-            ✅ Contract Deployed Successfully!
-          </div>
-          <div className="text-sm text-gray-600">
-            Transaction ID: {deploymentResult.transactionId}
-          </div>
-        </div>
-      )}
-
-      {error && (
-        <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-          Error: {error}
-        </div>
-      )}
-    </div>
-  );
-};
-</cosmiqAction>
 <cosmiqAction type="file" filePath="src/components/TodoApp.jsx">
 import { useState, useEffect } from 'react';
 import { useFlowAuth } from '../contexts/FlowAuthContext';
-import { ContractDeployment } from './flow/ContractDeployment';
 import * as fcl from '@onflow/fcl';
 
 export const TodoApp = () => {

@@ -38,8 +38,6 @@ Based on the application context, create a relevant Cadence smart contract:
 1. **WalletLogin.tsx**: Flow wallet authentication interface
 2. **FlowAuthContext.tsx**: Authentication state management
 3. **AuthGuard.tsx**: Protected route wrapper
-4. **ContractDeployment.tsx**: Smart contract deployment interface
-5. **ContractInteraction.tsx**: Contract function calling interface
 
 ### CONSOLE LOGGING REQUIREMENTS:
 

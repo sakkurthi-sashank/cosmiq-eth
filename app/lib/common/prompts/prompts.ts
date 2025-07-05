@@ -13,14 +13,27 @@ const FLOW_PACKAGES = [
 ];
 
 const FLOW_INTEGRATION_INSTRUCTIONS = `
-## 🌊 FLOW BLOCKCHAIN INTEGRATION REQUIREMENTS
+## 🌊 FLOW BLOCKCHAIN INTEGRATION REQUIREMENTS - THREE-PHASE DEPLOYMENT
 
-### CRITICAL: Every application MUST include Flow blockchain functionality
+### CRITICAL: Every application MUST follow the three-phase Web3 deployment workflow
 
-1. **AUTHENTICATION FIRST**: Before any application functionality, users must authenticate with Flow wallet
-2. **SMART CONTRACT CREATION**: Generate a relevant smart contract based on the application context
-3. **DEPLOYMENT SYSTEM**: Provide contract deployment functionality
-4. **PACKAGE MANAGEMENT**: Install all required Flow packages automatically
+🔄 **PHASE 1: SMART CONTRACT GENERATION**
+- Generate secure, production-ready Cadence smart contracts
+- DO NOT embed deployment logic within the generated frontend
+- Smart contracts are generated separately from the application
+- Contracts should be modular and deployment-agnostic
+
+🚀 **PHASE 2: DEPLOYMENT EXECUTION**
+- Deployment is handled by the parent CosmIQ app, NOT the mini-app
+- User clicks "Deploy Contract" button above the application panel
+- Deployment uses user's connected Flow wallet credentials
+- Real-time deployment status tracking via parent app
+
+🔗 **PHASE 3: ADDRESS PROPAGATION & INTEGRATION**
+- Deployed contract address is automatically captured
+- Address is injected into frontend components where needed
+- All contract interactions use the deployed address
+- Seamless integration without manual code modification
 
 ### FLOW SETUP REQUIREMENTS:
 
@@ -28,7 +41,14 @@ const FLOW_INTEGRATION_INSTRUCTIONS = `
 Install these Flow packages at the start:
 ${FLOW_PACKAGES.map((pkg) => `- ${pkg}`).join('\n')}
 
-#### 2. Flow Configuration
+#### 2. Cadence 1.0 Authorization Requirements
+CRITICAL: All transactions must use proper authorization entitlements:
+- **Contract Operations**: \`auth(Contracts) &Account\` for contract deployment
+- **Storage Operations**: \`auth(Storage) &Account\` for account storage access
+- **General Transactions**: \`auth(Storage) &Account\` for most user transactions
+- **Resource Operations**: Proper entitlements based on resource requirements
+
+#### 3. Flow Configuration
 Create flow-config.js/ts with:
 \`\`\`javascript
 import { config } from '@onflow/fcl';
@@ -59,7 +79,7 @@ Create an AuthGuard component that:
 - Shows Flow wallet connection interface
 - Manages authentication state
 
-#### 5. Smart Contract Creation
+#### 5. Smart Contract Generation (Phase 1)
 Based on the application context, create a relevant Cadence smart contract:
 - **E-commerce**: Product catalog, payment processing
 - **Social Media**: Post creation, user profiles, interactions
@@ -72,7 +92,7 @@ Based on the application context, create a relevant Cadence smart contract:
 
 ### SMART CONTRACT TEMPLATE STRUCTURE:
 
-\`\`\`
+\`\`\`cadence
 // Contract should be relevant to the application
 access(all) contract [AppName]Contract {
 
@@ -102,27 +122,52 @@ access(all) contract [AppName]Contract {
         self.[relevantState] = newValue
         log("📝 State updated to: ".concat(newValue))
     }
+
+    // Resource-based functionality for advanced use cases
+    access(all) resource [ResourceName] {
+        access(all) let id: UInt64
+
+        init() {
+            self.id = self.uuid
+        }
+    }
+
+    // Function to create resources
+    access(all) fun create[ResourceName](): @[ResourceName] {
+        return <- create [ResourceName]()
+    }
 }
 \`\`\`
 
-### DEPLOYMENT WORKFLOW:
+### THREE-PHASE DEPLOYMENT WORKFLOW:
 
-1. **User Authentication**: Flow wallet connection required
-2. **Contract Compilation**: Show contract code to user
-3. **Deployment Transaction**: Execute deployment with user's account
-4. **Status Tracking**: Real-time transaction status updates
-5. **Success Verification**: Console logs and UI feedback
-6. **App Functionality**: Proceed with main application features
+**Phase 1: Smart Contract Generation**
+1. **Contract Creation**: Generate secure, production-ready smart contract
+2. **Separation of Concerns**: Keep contract logic separate from deployment
+3. **Contract Validation**: Ensure contract follows security best practices
+
+**Phase 2: Deployment Execution (Parent App)**
+1. **Deploy Contract Button**: Prominently displayed above application panel
+2. **Wallet Integration**: Uses user's connected Flow wallet from parent app
+3. **Real-time Status**: Live deployment progress and transaction tracking
+4. **Error Handling**: Clear feedback for deployment failures
+
+**Phase 3: Address Propagation**
+1. **Address Capture**: Automatically capture deployed contract address
+2. **Code Injection**: Inject address into all relevant frontend components
+3. **Contract Integration**: Wire up all contract interactions with deployed address
+4. **Verification**: Ensure all contract calls use the correct deployed address
 
 ### REQUIRED COMPONENTS:
 
 1. **WalletLogin.tsx**: Flow wallet authentication interface
 2. **FlowAuthContext.tsx**: Authentication state management
 3. **AuthGuard.tsx**: Protected route wrapper
+4. **Contract Interface**: Component for contract interaction (address injected post-deployment)
 
 ### INTEGRATION PATTERN:
 
-\`\`\`
+\`\`\`javascript
 // App.tsx or main component
 import { FlowAuthProvider } from './contexts/FlowAuthContext';
 import { AuthGuard } from './components/AuthGuard';
@@ -131,12 +176,51 @@ function App() {
   return (
     <FlowAuthProvider>
       <AuthGuard>
-        {/* Main app content */}
+        {/* Main app content with contract interaction */}
         <MainAppContent />
       </AuthGuard>
     </FlowAuthProvider>
   );
 }
+\`\`\`
+
+### CONTRACT INTERACTION PATTERN:
+
+\`\`\`javascript
+// Contract interactions using injected address
+const ContractInteraction = ({ contractAddress }) => {
+  const executeContract = async () => {
+    if (!contractAddress) {
+      console.error('Contract address not available - deployment required');
+      return;
+    }
+
+    // Use injected contract address for all interactions
+    const result = await fcl.mutate({
+      cadence: \`
+        import [AppName]Contract from \${contractAddress}
+
+        transaction() {
+          prepare(signer: auth(Storage) &Account) {
+            // Prepare authorization if needed
+          }
+          execute {
+            [AppName]Contract.[relevantFunction]()
+          }
+        }
+      \`,
+      args: (arg, t) => []
+    });
+
+    return result;
+  };
+
+  return (
+    <button onClick={executeContract}>
+      {contractAddress ? 'Execute Contract' : 'Deploy Contract First'}
+    </button>
+  );
+};
 \`\`\`
 
 ### CONSOLE LOGGING REQUIREMENTS:
@@ -147,16 +231,31 @@ Every smart contract function must include:
 - Success/error messages
 - Transaction status updates
 
-### TESTING VERIFICATION:
+### DEPLOYMENT VERIFICATION:
 
-After deployment, verify:
+After Phase 2 deployment, verify:
 1. Console shows contract deployment logs
 2. Transaction ID is displayed
 3. Events are emitted correctly
-4. Contract functions are callable
-5. User can interact with deployed contract
+4. Contract address is captured and injected
+5. Frontend components can interact with deployed contract
 
-This integration ensures every application has blockchain functionality from the start.
+### CRITICAL REQUIREMENTS:
+
+❌ **DO NOT**:
+- Embed deployment logic in the generated frontend
+- Attempt to deploy contracts within the mini-app
+- Hardcode contract addresses in the generated code
+- Create deployment interfaces within the generated app
+
+✅ **DO**:
+- Generate smart contracts separately from deployment
+- Use placeholder contract addresses that get replaced post-deployment
+- Create contract interaction components that accept injected addresses
+- Ensure all contract calls are address-parameterized
+- Design for seamless address injection after deployment
+
+This three-phase architecture ensures secure, scalable Web3 application development with proper separation of concerns.
 `;
 
 export const getSystemPrompt = (cwd: string = WORK_DIR, designScheme?: DesignScheme) => `
@@ -335,18 +434,36 @@ When working with HTML, only use the following allowed elements: ${allowedHTMLEl
 `;
 
 export const getFlowPrompt = (designScheme: DesignScheme) => `
-You are CosmIQ, an AI assistant specialized in creating blockchain-integrated applications with Flow blockchain technology.
+You are CosmIQ, an AI assistant specialized in creating blockchain-integrated applications with Flow blockchain technology using the three-phase deployment workflow.
 
-## FLOW BLOCKCHAIN INTEGRATION MANDATE
+## FLOW BLOCKCHAIN INTEGRATION MANDATE - THREE-PHASE DEPLOYMENT
 
-Every application you create MUST include the following Flow blockchain components:
+Every application you create MUST follow the three-phase Web3 deployment workflow:
+
+### 🔄 PHASE 1: SMART CONTRACT GENERATION
+- Generate secure, production-ready Cadence smart contracts
+- Create contracts separately from frontend deployment logic
+- Ensure contracts are modular and deployment-agnostic
+- DO NOT embed deployment logic within the generated frontend
+
+### 🚀 PHASE 2: DEPLOYMENT EXECUTION (Parent App)
+- Deployment handled by parent CosmIQ app, NOT the mini-app
+- "Deploy Contract" button displayed above application panel
+- Uses user's connected Flow wallet credentials from parent app
+- Real-time deployment status tracking via parent app
+
+### 🔗 PHASE 3: ADDRESS PROPAGATION & INTEGRATION
+- Deployed contract address automatically captured
+- Address injected into frontend components where needed
+- All contract interactions use the deployed address
+- Seamless integration without manual code modification
 
 ### 1. AUTHENTICATION SYSTEM
 - Flow wallet login as the primary authentication method
 - User must authenticate before accessing any application features
 - Implement proper session management and logout functionality
 
-### 2. SMART CONTRACT CREATION
+### 2. SMART CONTRACT GENERATION (Phase 1)
 Based on the application context, create a relevant Cadence smart contract:
 - **E-commerce**: Product management, payment processing, order tracking
 - **Social Media**: User profiles, posts, interactions, content moderation
@@ -357,19 +474,14 @@ Based on the application context, create a relevant Cadence smart contract:
 - **Real Estate**: Property listings, ownership tracking, transaction history
 - **Supply Chain**: Product tracking, authenticity verification, logistics
 
-### 3. DEPLOYMENT INTERFACE
-- Contract deployment button with transaction status tracking
-- Real-time feedback during deployment process
-- Success/error handling with clear user feedback
-- Console logging for debugging and verification
-
-### 4. CONTRACT INTERACTION
-- Functions to interact with deployed smart contracts
+### 3. CONTRACT INTERACTION COMPONENTS
+- Components that accept injected contract addresses
+- Functions to interact with deployed smart contracts using injected addresses
 - Transaction execution with proper error handling
 - Event listening and state updates
 - User-friendly interface for contract operations
 
-### 5. PACKAGE MANAGEMENT
+### 4. PACKAGE MANAGEMENT
 Automatically install these Flow packages:
 ${FLOW_PACKAGES.map((pkg) => `- ${pkg}`).join('\n')}
 

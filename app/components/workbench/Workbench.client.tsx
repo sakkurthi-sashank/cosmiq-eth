@@ -13,6 +13,7 @@ import { classNames } from '~/utils/classNames';
 import { cubicEasingFn } from '~/utils/easings';
 import { EditorPanel } from './EditorPanel';
 import { Preview } from './Preview';
+import { DeployContractButton } from './DeployContractButton';
 import useViewport from '~/lib/hooks';
 import { usePreviewStore } from '~/lib/stores/previews';
 import { chatStore } from '~/lib/stores/chat';
@@ -106,6 +107,9 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
         className="z-workbench relative h-full"
       >
         <div className="h-full border-l border-cosmiq-elements-borderColor bg-cosmiq-elements-background-depth-2 flex flex-col">
+          {/* Deploy Contract Button - Prominently displayed above application panel */}
+          <DeployContractButton />
+
           <div className="flex items-center px-3 py-2 border-b border-cosmiq-elements-borderColor">
             <div className="flex items-center gap-2">
               <button
@@ -113,7 +117,7 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
                   'px-3 py-1 rounded-md text-sm font-medium transition-colors',
                   selectedView === 'code'
                     ? 'bg-cosmiq-elements-item-backgroundActive text-cosmiq-elements-textPrimary'
-                    : 'text-cosmiq-elements-textSecondary hover:text-cosmiq-elements-textPrimary hover:bg-cosmiq-elements-item-backgroundActive'
+                    : 'text-cosmiq-elements-textSecondary hover:text-cosmiq-elements-textPrimary hover:bg-cosmiq-elements-item-backgroundActive',
                 )}
                 onClick={() => setSelectedView('code')}
               >
@@ -125,7 +129,7 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
                     'px-3 py-1 rounded-md text-sm font-medium transition-colors',
                     selectedView === 'preview'
                       ? 'bg-cosmiq-elements-item-backgroundActive text-cosmiq-elements-textPrimary'
-                      : 'text-cosmiq-elements-textSecondary hover:text-cosmiq-elements-textPrimary hover:bg-cosmiq-elements-item-backgroundActive'
+                      : 'text-cosmiq-elements-textSecondary hover:text-cosmiq-elements-textPrimary hover:bg-cosmiq-elements-item-backgroundActive',
                   )}
                   onClick={() => setSelectedView('preview')}
                 >

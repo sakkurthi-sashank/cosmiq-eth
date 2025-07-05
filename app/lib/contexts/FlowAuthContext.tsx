@@ -15,9 +15,11 @@ const FlowAuthContext = createContext<FlowAuthContextType | undefined>(undefined
 
 export const useFlowAuth = () => {
   const context = useContext(FlowAuthContext);
+
   if (context === undefined) {
     throw new Error('useFlowAuth must be used within a FlowAuthProvider');
   }
+
   return context;
 };
 
@@ -51,8 +53,10 @@ export const FlowAuthProvider: React.FC<FlowAuthProviderProps> = ({ children }) 
           console.log('📍 Flow Public Address:', user.addr);
         }
 
-        // Note: Private keys are never exposed for security reasons
-        // Flow wallets maintain custody of private keys
+        /*
+         * Note: Private keys are never exposed for security reasons
+         * Flow wallets maintain custody of private keys
+         */
         console.log('🔒 Private Key: Not available (secured by wallet)');
 
         setError(null);

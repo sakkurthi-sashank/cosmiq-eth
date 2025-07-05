@@ -1,10 +1,9 @@
 import { json } from '@remix-run/cloudflare';
-import { ClientOnly } from 'remix-utils/client-only';
-import { BaseChat } from '~/components/chat/BaseChat';
-import { Chat } from '~/components/chat/Chat.client';
 import { Header } from '~/components/header/Header';
 import { AuthGuard } from '~/components/flow/AuthGuard';
-
+import { BaseChat } from '~/components/chat/BaseChat';
+import { Chat } from '~/components/chat/Chat.client';
+import { ClientOnly } from 'remix-utils/client-only';
 export const loader = () => json({});
 
 /**

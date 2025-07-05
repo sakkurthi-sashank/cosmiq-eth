@@ -1,296 +1,259 @@
-# Cosmiq - AI-Powered Web3 Application Builder
+# Cosmiq - Advanced AI-Powered Web3 Development Platform
+![image](https://github.com/user-attachments/assets/72d8f226-44f0-4179-b135-a7524d2114aa)
 
-AI-powered platform that generates working Web3 applications from natural language prompts, running entirely in your browser with integrated Flow blockchain functionality.
+**A next-generation AI-powered development platform that generates full-stack Web3 applications with integrated smart contracts from natural language prompts, running entirely in your browser with integrated Flow blockchain functionality and advanced knowledge graph intelligence.**
 
-![CosmIQ Demo](https://github.com/cosmiq/cosmiq/assets/placeholder-demo.gif)
+## 🚀 **Overview**
 
-## Features
+Cosmiq represents the future of Web3 development - a sophisticated platform that combines cutting-edge AI technology with blockchain infrastructure to create a seamless development experience. Built on a foundation of modern web technologies, Cosmiq enables developers to build, deploy, and manage sophisticated Web3 applications integrated with smart contracts without leaving their browser.
 
-### AI-Powered Development
+### **Key Innovation Areas**
 
-- Natural language to code conversion
-- Real-time streaming code generation
-- Context-aware development
-- Multi-model AI support (15+ providers)
+- **🧠 AI-First Development**: Natural language to production-ready web3 apps with integrated smart contracts
+- **⚡ Browser-Native Runtime**: Full Node.js environment in WebContainer
+- **🔗 Blockchain Integration**: Native Flow blockchain support with smart contract deployment
+- **📊 Knowledge Graph Intelligence**: Advanced dApp analytics and discovery
+- **🔄 Real-time Collaboration**: Streaming AI responses with live development environment
 
-### Web3 & Blockchain Integration
+---
 
-- Flow blockchain integration
-- Smart contract generation and deployment
-- Wallet authentication
-- Real-time transaction tracking
+## 🏗️ **Technical Architecture**
 
-### WebContainer Technology
+### **Core Technology Stack**
 
-- Browser-based Node.js runtime
-- Live preview with hot reloading
-- Terminal access
-- No server required
+<details>
+<summary><strong>Frontend Framework & UI</strong></summary>
 
-### Development Environment
+- **Remix** - Full-stack React framework with server-side rendering
+- **React 18** - Modern React features with concurrent rendering
+- **TypeScript** - Type-safe development with advanced type inference
+- **Tailwind CSS** - Utility-first styling with custom design system
+- **UnoCSS** - Atomic CSS engine for optimized bundle size
+- **Framer Motion** - Advanced animations and gesture handling
+- **Radix UI** - Accessible, unstyled component primitives
 
-- Code editor with syntax highlighting
-- File system management
-- Import/export capabilities
-- Design system integration
+</details>
 
-![CosmIQ Architecture](https://github.com/cosmiq/cosmiq/assets/placeholder-architecture.png)
+<details>
+<summary><strong>AI & Machine Learning</strong></summary>
 
-## How It Works
+- **Vercel AI SDK** - Streaming AI responses with tool calling
+- **Anthropic Claude** - Primary AI provider with advanced reasoning
+- **Multi-Provider Support** - OpenAI, Google, Cohere, Mistral, DeepSeek
+- **Streaming Intelligence** - Real-time response generation
+- **Context Optimization** - Smart prompt engineering and context management
+- **Prompt Enhancement** - Automatic prompt improvement and validation
 
-### 1. Natural Language Input
+</details>
 
-Describe what you want to build in plain English.
+<details>
+<summary><strong>Blockchain & Web3</strong></summary>
 
-### 2. AI Code Generation
+- **Flow Blockchain** - Developer-friendly blockchain with resource-oriented programming
+- **Flow Client Library (FCL)** - Secure wallet integration and transaction management
+- **Cadence** - Resource-oriented smart contract language
+- **Multi-Wallet Support** - Blocto, Lilico, Dapper wallet integration
+- **Flow Testnet** - Integrated testing environment
+- **Smart Contract Deployment** - Automated contract deployment and verification
 
-- Analyzes requirements
-- Generates application structure
-- Creates smart contracts
-- Sets up authentication and deployment
+</details>
 
-### 3. WebContainer Execution
+<details>
+<summary><strong>Development Environment</strong></summary>
 
-- Full Node.js runtime in browser
-- Package management
-- Live preview with hot reloading
-- Terminal access
+- **WebContainer API** - Browser-based Node.js runtime
+- **CodeMirror 6** - Advanced code editor with syntax highlighting
+- **Xterm.js** - Full-featured terminal emulator
+- **Vite** - Lightning-fast build tool and development server
+- **File System API** - Native browser file operations
+- **Hot Module Replacement** - Instant code updates
 
-### 4. Blockchain Integration
+</details>
 
-- Flow wallet authentication
-- Smart contract deployment tracking
-- Transaction management
+<details>
+<summary><strong>Knowledge Graph & Intelligence</strong></summary>
 
-![CosmIQ Workflow](https://github.com/cosmiq/cosmiq/assets/placeholder-workflow.png)
+- **Hypergraph Framework** - Decentralized knowledge graph infrastructure
+- **GRC-20 Standard** - Composable knowledge graph tokens
+- **IPFS Integration** - Decentralized content storage
+- **AI-Powered Analytics** - Intelligent dApp discovery and recommendations
+- **Composition Intelligence** - Cross-project opportunity identification
 
-## Technology Stack
+</details>
 
-### Frontend Framework
+<details>
+<summary><strong>State Management & Storage</strong></summary>
 
-- Remix - Full-stack React framework
-- TypeScript - Type-safe development
-- React 18 - Modern React features
-- Tailwind CSS - Utility-first styling
-- UnoCSS - Atomic CSS
+- **Nanostores** - Minimal state management library
+- **Zustand** - Lightweight state management for complex scenarios
+- **IndexedDB** - Browser-based persistent storage
+- **File System Persistence** - Native file system integration
+- **Cookie Management** - Secure credential storage
+- **WebContainer State** - Synchronized development environment state
 
-### AI & Language Models
+</details>
 
-- Vercel AI SDK - AI integration
-- Multiple Providers - OpenAI, Anthropic, Google, Cohere, Mistral, DeepSeek
-- Streaming Responses - Real-time output
-- Context Optimization - Smart context management
+</details>
 
-### Blockchain & Web3
 
-- Flow Blockchain - Developer-friendly blockchain
-- FCL - Flow authentication and transactions
-- Cadence - Smart contract language
-- Flow Testnet - Testing environment
 
-### Development Environment
+---
 
-- WebContainer API - Browser-based Node.js runtime
-- CodeMirror - Code editor
-- Xterm.js - Terminal emulator
-- Vite - Build tool
+## 📊 **System Architecture**
 
-### State Management & Storage
-
-- Nanostores - State management
-- IndexedDB - Browser data persistence
-- Zustand - Simple state management
-- File System API - Browser file operations
-
-## Project Structure
+### **Application Structure**
 
 ```
 cosmiq/
-├── app/                          # Remix application
-│   ├── components/               # React components
-│   │   ├── chat/                # AI chat interface
-│   │   │   ├── BaseChat.tsx     # Main chat component
-│   │   │   ├── ChatBox.tsx      # Input interface
-│   │   │   ├── Messages.tsx     # Message display
-│   │   │   └── Artifact.tsx     # Generated code artifacts
-│   │   ├── workbench/           # Development environment
-│   │   │   ├── CodeEditor.tsx   # Code editing interface
-│   │   │   ├── Preview.tsx      # Live application preview
-│   │   │   └── Terminal.tsx     # Terminal interface
-│   │   ├── flow/                # Flow blockchain components
-│   │   │   ├── AuthGuard.tsx    # Authentication wrapper
-│   │   │   ├── WalletLogin.tsx  # Wallet connection
-│   │   │   └── FlowAuthHeader.tsx # User status display
-│   │   └── ui/                  # Reusable UI components
-│   ├── routes/                  # Remix routes
-│   │   ├── _index.tsx          # Landing page
-│   │   ├── chat.$id.tsx        # Chat interface
-│   │   ├── api.chat.ts         # AI chat API
-│   │   └── webcontainer.*.tsx  # WebContainer endpoints
-│   ├── lib/                    # Core libraries
-│   │   ├── common/prompts/     # AI prompt engineering
-│   │   ├── contexts/           # React contexts
-│   │   ├── stores/             # State management
-│   │   ├── webcontainer/       # WebContainer integration
-│   │   └── persistence/        # Data persistence
-│   ├── utils/                  # Utility functions
-│   └── types/                  # TypeScript definitions
-├── public/                     # Static assets
-├── build/                      # Build output
-├── functions/                  # Cloudflare Functions
-└── contracts/                  # Smart contract examples
+├── 🎯 Core Application
+│   ├── app/
+│   │   ├── components/           # React components
+│   │   │   ├── chat/            # AI chat interface
+│   │   │   ├── workbench/       # Development environment
+│   │   │   ├── flow/            # Flow blockchain integration
+│   │   │   ├── knowledgeGraph/  # Knowledge graph intelligence
+│   │   │   └── ui/              # Reusable UI components
+│   │   ├── lib/                 # Core libraries
+│   │   │   ├── prompts/         # system prompts
+│   │   │   ├── modules/llm/     # AI model management
+│   │   │   ├── webcontainer/    # WebContainer integration
+│   │   │   ├── contexts/        # React contexts
+│   │   │   ├── stores/          # State management
+│   │   │   └── services/        # Business logic services
+│   │   ├── routes/              # Remix routes
+│   │   └── utils/               # Utility functions
+│   │
+├── 🚀 Infrastructure
+│   ├── functions/               # Cloudflare Functions
+│   ├── public/                  # Static assets
+│   └── worker-configuration.d.ts # Worker type definitions
+│
+├── 🔧 Configuration
+│   ├── vite.config.ts          # Vite configuration
+│   ├── uno.config.ts           # UnoCSS configuration
+│   ├── tsconfig.json           # TypeScript configuration
+│   └── wrangler.toml           # Cloudflare configuration
+│
+└── 📦 Dependencies
+    ├── package.json            # Project dependencies
+    └── pnpm-lock.yaml         # Dependency lock file
 ```
 
-![CosmIQ File Structure](https://github.com/cosmiq/cosmiq/assets/placeholder-structure.png)
+### **Data Flow Architecture**
 
-## Getting Started
+```mermaid
+graph TB
+    A[User Input] --> B[AI Processing]
+    B --> C[Code Generation]
+    C --> D[WebContainer]
+    D --> E[Live Preview]
+    
+    F[Flow Wallet] --> G[Blockchain]
+    G --> H[Smart Contracts]
+    H --> I[Knowledge Graph]
+    
+    J[File System] --> K[State Management]
+    K --> L[Real-time Updates]
+    L --> M[UI Components]
+    
+    N[Knowledge Graph] --> O[AI Analytics]
+    O --> P[Recommendations]
+    P --> Q[Discovery Engine]
+```
 
-### Prerequisites
+---
 
-- Node.js 18.18.0 or higher
-- PNPM 9.4.0 or higher
-- Modern Browser with WebContainer support
+## 🛠️ **Installation & Setup**
 
-### Installation
+### **Prerequisites**
 
-1. Clone the repository
+```bash
+# Required versions
+Node.js >= 18.18.0
+PNPM >= 9.4.0
+Git >= 2.34.0
 
-   ```bash
-   git clone https://github.com/cosmiq/cosmiq.git
-   cd cosmiq
-   ```
+# Recommended browser
+Chrome Canary (for development)
+```
 
-2. Install dependencies
+### **Quick Start**
 
-   ```bash
-   pnpm install
-   ```
+```bash
+# 1. Clone the repository
+git clone https://github.com/sakkurthi-sashank/cosmiq-eth.git
+cd cosmiq
 
-3. Set up environment variables
+# 2. Install dependencies
+pnpm install
 
-   ```bash
-   cp .env.example .env
-   # Add your AI provider API keys
-   ```
+# 3. Set up environment variables
+cp .env.example .env
+# Edit .env with your API keys
 
-4. Start development server
+# 4. Start development server
+pnpm dev
 
-   ```bash
-   pnpm dev
-   ```
+# 5. Open in browser
+open http://localhost:5173
+```
 
-5. Open in browser
-   ```
-   http://localhost:5173
-   ```
+### **Environment Configuration**
 
-### Environment Variables
+<summary><strong>Complete Environment Setup</strong></summary>
 
-Create a `.env` file with your AI provider keys:
-
-```env
-# AI Provider API Keys
-OPENAI_API_KEY=your_openai_key
-ANTHROPIC_API_KEY=your_anthropic_key
-GOOGLE_GENERATIVE_AI_API_KEY=your_google_key
-COHERE_API_KEY=your_cohere_key
+```bash
+# AI Provider Configuration
+ANTHROPIC_API_KEY=your_anthropic_key_here
 
 # Flow Blockchain Configuration
 FLOW_NETWORK=testnet
 FLOW_ACCESS_NODE=https://rest-testnet.onflow.org
+FLOW_DISCOVERY_WALLET=https://fcl-discovery.onflow.org/testnet/authn
+
+# Knowledge Graph Configuration
+HYPERGRAPH_NETWORK=testnet
+HYPERGRAPH_API_URL=https://hypergraph-v2-testnet.up.railway.app
+WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
+VITE_PRIVATE_KEY=your_private_key
+VITE_ADDRESS=your_wallet_address
 
 # Application Configuration
 APP_URL=http://localhost:5173
+APP_TITLE=CosmiqETH
+APP_DESCRIPTION=AI-powered Web3 development platform
+
+# Development Configuration
+VITE_DEV_MODE=true
+VITE_DEBUG_MODE=false
+VITE_ENABLE_ANALYTICS=true
 ```
 
-## Core Features
 
-### AI Chat Interface
+## 🛣️ **Roadmap**
 
-- Multi-turn conversations
-- Complete application generation
-- Real-time streaming
-- Error detection and fixing
-- Code explanation
-
-### WebContainer Integration
-
-- Full Node.js runtime in browser
-- Package installation
-- File system operations
-- Terminal access
-- Live preview with hot reloading
-
-### Flow Blockchain Integration
-
-- FCL configuration for testnet
-- Wallet authentication (Blocto, Lilico, Dapper)
-- Smart contract generation
-- Deployment automation
-- Transaction tracking
-
-### Development Workbench
-
-- Code editor with syntax highlighting
-- File explorer
-- Terminal access
-- Live preview
-- Element inspector
-
-## Advanced Configuration
-
-### Flow Blockchain Setup
-
-For blockchain development, ensure proper Flow configuration:
-
-```typescript
-// Flow configuration
-export const flowConfig = {
-  'accessNode.api': 'https://rest-testnet.onflow.org',
-  'discovery.wallet': 'https://fcl-discovery.onflow.org/testnet/authn',
-  'app.detail.title': 'Your App Name',
-  'fcl.limit': 1000,
-};
-```
-
-### WebContainer Customization
-
-Customize the WebContainer environment:
-
-```typescript
-// WebContainer options
-const containerOptions = {
-  coep: 'credentialless',
-  workdirName: 'cosmiq-project',
-  forwardPreviewErrors: true,
-};
-```
-
-### Development Setup
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Add tests if applicable
-5. Commit: `git commit -m 'Add amazing feature'`
-6. Push: `git push origin feature/amazing-feature`
-7. Open a Pull Request
-
-## Roadmap
-
-- [x] AI chat interface
+### **Current Features ✅**
+- [x] AI-powered code generation
 - [x] WebContainer integration
 - [x] Flow blockchain support
-- [x] Code generation and editing
+- [x] Knowledge graph intelligence
+- [x] Real-time streaming
+- [x] Smart contract deployment
+- [x] Smart contract and web2 integration
+- [x] Advanced development environment
+- [x] cadence knowledge base support
 
-## License
+### **Upcoming Features 🚧**
+- [ ] Multi-blockchain support (Ethereum, Solana)
+- [ ] Advanced debugging tools
+- [ ] Collaboration features
+- [ ] Enterprise features
+- [ ] Flow MCP integration
+- [ ] Advanced security features
+
+
+## 📄 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
-
-- [Flow Blockchain](https://flow.com/) - For the amazing blockchain platform
-- [WebContainer](https://webcontainer.io/) - For browser-based development environment
-- [Remix](https://remix.run/) - For the excellent full-stack framework
-- [Vercel AI SDK](https://sdk.vercel.ai/) - For AI integration capabilities
-- Open Source Community - For the incredible tools and libraries
+---

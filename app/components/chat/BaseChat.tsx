@@ -20,8 +20,6 @@ import type { ModelInfo } from '~/lib/modules/llm/types';
 import ProgressCompilation from './ProgressCompilation';
 import type { ProgressAnnotation } from '~/types/context';
 import type { ActionRunner } from '~/lib/runtime/action-runner';
-import { expoUrlAtom } from '~/lib/stores/qrCodeStore';
-import { useStore } from '@nanostores/react';
 import { StickToBottom, useStickToBottomContext } from '~/lib/hooks';
 import { ChatBox } from './ChatBox';
 import type { DesignScheme } from '~/types/design-scheme';
@@ -35,6 +33,7 @@ function getApiKeysFromCookies() {
       (acc, cookie) => {
         const [key, value] = cookie.split('=');
         acc[key.trim()] = decodeURIComponent(value);
+
         return acc;
       },
       {} as Record<string, string>,
@@ -57,8 +56,6 @@ interface BaseChatProps {
   onStreamingChange?: (streaming: boolean) => void;
   messages?: Message[];
   description?: string;
-  enhancingPrompt?: boolean;
-  promptEnhanced?: boolean;
   input?: string;
   model?: string;
   setModel?: (model: string) => void;
@@ -68,13 +65,8 @@ interface BaseChatProps {
   handleStop?: () => void;
   sendMessage?: (event: React.UIEvent, messageInput?: string) => void;
   handleInputChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  enhancePrompt?: () => void;
   importChat?: (description: string, messages: Message[]) => Promise<void>;
   exportChat?: () => void;
-  uploadedFiles?: File[];
-  setUploadedFiles?: (files: File[]) => void;
-  imageDataList?: string[];
-  setImageDataList?: (dataList: string[]) => void;
   actionAlert?: ActionAlert;
   clearAlert?: () => void;
   data?: JSONValue[] | undefined;
@@ -102,19 +94,11 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       setProvider,
       providerList,
       input = '',
-      enhancingPrompt,
       handleInputChange,
-
-      // promptEnhanced,
-      enhancePrompt,
       sendMessage,
       handleStop,
       importChat,
       exportChat,
-      uploadedFiles = [],
-      setUploadedFiles,
-      imageDataList = [],
-      setImageDataList,
       messages,
       actionAlert,
       clearAlert,
@@ -136,14 +120,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     const [isModelSettingsCollapsed, setIsModelSettingsCollapsed] = useState(false);
     const [isModelLoading, setIsModelLoading] = useState<string | undefined>('all');
     const [progressAnnotations, setProgressAnnotations] = useState<ProgressAnnotation[]>([]);
-    const expoUrl = useStore(expoUrlAtom);
-    const [qrModalOpen, setQrModalOpen] = useState(false);
-
-    useEffect(() => {
-      if (expoUrl) {
-        setQrModalOpen(true);
-      }
-    }, [expoUrl]);
 
     useEffect(() => {
       if (data) {
@@ -218,56 +194,11 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       }
     };
 
-    const handleFileUpload = () => {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-
-      input.onchange = async (e) => {
-        const file = (e.target as HTMLInputElement).files?.[0];
-
-        if (file) {
-          const reader = new FileReader();
-
-          reader.onload = (e) => {
-            const base64Image = e.target?.result as string;
-            setUploadedFiles?.([...uploadedFiles, file]);
-            setImageDataList?.([...imageDataList, base64Image]);
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-
-      input.click();
-    };
-
-    const handlePaste = async (e: React.ClipboardEvent) => {
-      const items = e.clipboardData?.items;
-
-      if (!items) {
-        return;
-      }
-
-      for (const item of items) {
-        if (item.type.startsWith('image/')) {
-          e.preventDefault();
-
-          const file = item.getAsFile();
-
-          if (file) {
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-              const base64Image = e.target?.result as string;
-              setUploadedFiles?.([...uploadedFiles, file]);
-              setImageDataList?.([...imageDataList, base64Image]);
-            };
-            reader.readAsDataURL(file);
-          }
-
-          break;
-        }
-      }
+    const handlePaste = async (_e: React.ClipboardEvent) => {
+      /*
+       * Handle paste functionality without file uploads
+       * This can be expanded later if needed for text paste
+       */
     };
 
     const baseChat = (
@@ -279,17 +210,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         <ClientOnly>{() => <Menu />}</ClientOnly>
         <div className="flex flex-col lg:flex-row overflow-y-auto w-full h-full">
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>
-            <StickToBottom
-              className={classNames('pt-6 px-2 sm:px-6 relative', {
-                'h-full flex flex-col modern-scrollbar': chatStarted,
-              })}
-              resize="smooth"
-              initial="smooth"
-            >
-              <StickToBottom.Content className="flex flex-col gap-4 relative ">
-                <ClientOnly>
-                  {() => {
-                    return chatStarted ? (
+            {chatStarted ? (
+              <StickToBottom
+                className="pt-6 px-2 sm:px-6 relative h-full flex flex-col modern-scrollbar"
+                resize="smooth"
+                initial="smooth"
+              >
+                <StickToBottom.Content className="flex flex-col gap-4 relative ">
+                  <ClientOnly>
+                    {() => (
                       <Messages
                         className="flex flex-col w-full flex-1 max-w-chat pb-4 mx-auto z-1"
                         messages={messages}
@@ -300,73 +229,170 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                         provider={provider}
                         model={model}
                       />
-                    ) : null;
-                  }}
-                </ClientOnly>
-                <ScrollToBottom />
-              </StickToBottom.Content>
-              <div
-                className={classNames('my-auto flex flex-col gap-2 w-full max-w-chat mx-auto z-prompt mb-6', {
-                  'sticky bottom-2': chatStarted,
-                })}
-              >
-                <div className="flex flex-col gap-2">
-                  {actionAlert && (
-                    <ChatAlert
-                      alert={actionAlert}
-                      clearAlert={() => clearAlert?.()}
-                      postMessage={(message) => {
-                        sendMessage?.({} as any, message);
-                        clearAlert?.();
-                      }}
-                    />
-                  )}
+                    )}
+                  </ClientOnly>
+                  <ScrollToBottom />
+                </StickToBottom.Content>
+                <div className="sticky bottom-2 flex flex-col gap-2 w-full max-w-chat mx-auto z-prompt mb-6">
+                  <div className="flex flex-col gap-2">
+                    {actionAlert && (
+                      <ChatAlert
+                        alert={actionAlert}
+                        clearAlert={() => clearAlert?.()}
+                        postMessage={(message) => {
+                          sendMessage?.({} as any, message);
+                          clearAlert?.();
+                        }}
+                      />
+                    )}
+                  </div>
+                  {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
+                  <ChatBox
+                    isModelSettingsCollapsed={isModelSettingsCollapsed}
+                    setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
+                    provider={provider}
+                    setProvider={setProvider}
+                    providerList={providerList || (PROVIDER_LIST as ProviderInfo[])}
+                    model={model}
+                    setModel={setModel}
+                    modelList={modelList}
+                    apiKeys={apiKeys}
+                    isModelLoading={isModelLoading}
+                    onApiKeysChange={onApiKeysChange}
+                    textareaRef={textareaRef}
+                    input={input}
+                    handleInputChange={handleInputChange}
+                    handlePaste={handlePaste}
+                    TEXTAREA_MIN_HEIGHT={TEXTAREA_MIN_HEIGHT}
+                    TEXTAREA_MAX_HEIGHT={TEXTAREA_MAX_HEIGHT}
+                    isStreaming={isStreaming}
+                    handleStop={handleStop}
+                    handleSendMessage={handleSendMessage}
+                    chatStarted={chatStarted}
+                    exportChat={exportChat}
+                    chatMode={chatMode}
+                    setChatMode={setChatMode}
+                    designScheme={designScheme}
+                    setDesignScheme={setDesignScheme}
+                    selectedElement={selectedElement}
+                    setSelectedElement={setSelectedElement}
+                  />
                 </div>
-                {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
-                <ChatBox
-                  isModelSettingsCollapsed={isModelSettingsCollapsed}
-                  setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
-                  provider={provider}
-                  setProvider={setProvider}
-                  providerList={providerList || (PROVIDER_LIST as ProviderInfo[])}
-                  model={model}
-                  setModel={setModel}
-                  modelList={modelList}
-                  apiKeys={apiKeys}
-                  isModelLoading={isModelLoading}
-                  onApiKeysChange={onApiKeysChange}
-                  uploadedFiles={uploadedFiles}
-                  setUploadedFiles={setUploadedFiles}
-                  imageDataList={imageDataList}
-                  setImageDataList={setImageDataList}
-                  textareaRef={textareaRef}
-                  input={input}
-                  handleInputChange={handleInputChange}
-                  handlePaste={handlePaste}
-                  TEXTAREA_MIN_HEIGHT={TEXTAREA_MIN_HEIGHT}
-                  TEXTAREA_MAX_HEIGHT={TEXTAREA_MAX_HEIGHT}
-                  isStreaming={isStreaming}
-                  handleStop={handleStop}
-                  handleSendMessage={handleSendMessage}
-                  enhancingPrompt={enhancingPrompt}
-                  enhancePrompt={enhancePrompt}
-                  chatStarted={chatStarted}
-                  exportChat={exportChat}
-                  qrModalOpen={qrModalOpen}
-                  setQrModalOpen={setQrModalOpen}
-                  handleFileUpload={handleFileUpload}
-                  chatMode={chatMode}
-                  setChatMode={setChatMode}
-                  designScheme={designScheme}
-                  setDesignScheme={setDesignScheme}
-                  selectedElement={selectedElement}
-                  setSelectedElement={setSelectedElement}
-                />
+              </StickToBottom>
+            ) : (
+              <div
+                className={classNames(
+                  styles.WelcomeScreen,
+                  'flex bg-gradient-to-t from-green-400 via-white to-white  flex-col items-center justify-center h-full min-h-screen px-4 py-8',
+                )}
+              >
+                {/* Welcome Section */}
+                <div className="flex flex-col items-center justify-center flex-1 max-w-4xl mx-auto space-y-8">
+                  {/* Title and Description */}
+                  <div className={classNames(styles.WelcomeTitle, 'text-center space-y-4')}>
+                    <h1 className="text-5xl md:text-6xl font-bold text-green-700">CosmIQ</h1>
+                    <p className="text-xl md:text-2xl text-cosmiq-elements-textSecondary max-w-2xl">
+                      The ultimate AI-powered platform for building Web3 applications. Create decentralized apps, smart
+                      contracts, and blockchain solutions with intelligent assistance.
+                    </p>
+                  </div>
+
+                  {/* Features */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl mt-8">
+                    <div
+                      className={classNames(
+                        styles.WelcomeFeature,
+                        'rounded-xl p-6 border bg-white border-cosmiq-elements-borderColor shadow-md hover:shadow-lg transition-shadow duration-300',
+                      )}
+                    >
+                      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <span className="i-ph:code text-2xl text-blue-500" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-2">Smart Contracts</h3>
+                      <p className="text-cosmiq-elements-textSecondary">
+                        AI-powered smart contract development and auditing
+                      </p>
+                    </div>
+                    <div
+                      className={classNames(
+                        styles.WelcomeFeature,
+                        'rounded-xl p-6 border bg-white border-cosmiq-elements-borderColor shadow-md hover:shadow-lg transition-shadow duration-300',
+                      )}
+                    >
+                      <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <span className="i-ph:chat-circle text-2xl text-purple-500" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-2">Web3 Assistant</h3>
+                      <p className="text-cosmiq-elements-textSecondary">
+                        Expert guidance for DeFi, NFTs, and blockchain development
+                      </p>
+                    </div>
+                    <div
+                      className={classNames(
+                        styles.WelcomeFeature,
+                        'rounded-xl p-6 border bg-white border-cosmiq-elements-borderColor shadow-md hover:shadow-lg transition-shadow duration-300',
+                      )}
+                    >
+                      <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <span className="i-ph:rocket text-2xl text-green-500" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-2">DApp Deployment</h3>
+                      <p className="text-cosmiq-elements-textSecondary">Deploy to multiple blockchains with ease</p>
+                    </div>
+                  </div>
+
+                  {/* Chat Input Section */}
+                  <div className="w-full max-w-4xl space-y-6">
+                    <div className="flex flex-col gap-2">
+                      {actionAlert && (
+                        <ChatAlert
+                          alert={actionAlert}
+                          clearAlert={() => clearAlert?.()}
+                          postMessage={(message) => {
+                            sendMessage?.({} as any, message);
+                            clearAlert?.();
+                          }}
+                        />
+                      )}
+                    </div>
+                    {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
+                    <ChatBox
+                      isModelSettingsCollapsed={isModelSettingsCollapsed}
+                      setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
+                      provider={provider}
+                      setProvider={setProvider}
+                      providerList={providerList || (PROVIDER_LIST as ProviderInfo[])}
+                      model={model}
+                      setModel={setModel}
+                      modelList={modelList}
+                      apiKeys={apiKeys}
+                      isModelLoading={isModelLoading}
+                      onApiKeysChange={onApiKeysChange}
+                      textareaRef={textareaRef}
+                      input={input}
+                      handleInputChange={handleInputChange}
+                      handlePaste={handlePaste}
+                      TEXTAREA_MIN_HEIGHT={TEXTAREA_MIN_HEIGHT}
+                      TEXTAREA_MAX_HEIGHT={TEXTAREA_MAX_HEIGHT}
+                      isStreaming={isStreaming}
+                      handleStop={handleStop}
+                      handleSendMessage={handleSendMessage}
+                      chatStarted={chatStarted}
+                      exportChat={exportChat}
+                      chatMode={chatMode}
+                      setChatMode={setChatMode}
+                      designScheme={designScheme}
+                      setDesignScheme={setDesignScheme}
+                      selectedElement={selectedElement}
+                      setSelectedElement={setSelectedElement}
+                    />
+
+                    {/* Import Buttons */}
+                    <div className="flex justify-center gap-2">{ImportButtons(importChat)}</div>
+                  </div>
+                </div>
               </div>
-            </StickToBottom>
-            <div className="flex flex-col justify-center">
-              {!chatStarted && <div className="flex justify-center gap-2">{ImportButtons(importChat)}</div>}
-            </div>
+            )}
           </div>
           <ClientOnly>
             {() => (

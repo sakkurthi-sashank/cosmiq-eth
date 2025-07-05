@@ -66,23 +66,6 @@ export interface TabWindowConfig {
   developerTabs: DevTabConfig[];
 }
 
-export const TAB_LABELS: Record<TabType, string> = {
-  profile: 'Profile',
-  settings: 'Settings',
-  notifications: 'Notifications',
-  features: 'Features',
-  data: 'Data Management',
-  'cloud-providers': 'Cloud Providers',
-  'local-providers': 'Local Providers',
-  'service-status': 'Service Status',
-  connection: 'Connections',
-  debug: 'Debug',
-  'event-logs': 'Event Logs',
-  update: 'Updates',
-  'task-manager': 'Task Manager',
-  'tab-management': 'Tab Management',
-};
-
 export const categoryLabels: Record<SettingCategory, string> = {
   profile: 'Profile & Account',
   file_sharing: 'File Sharing',

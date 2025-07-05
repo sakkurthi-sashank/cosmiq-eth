@@ -1,7 +1,7 @@
 import React from 'react';
-import { useFlowAuth } from '../../lib/contexts/FlowAuthContext';
+import { useFlowAuth } from '~/lib/contexts/FlowAuthContext';
 import { WalletLogin } from './WalletLogin';
-import { LoadingOverlay } from '../ui/LoadingOverlay';
+import { LoadingOverlay } from '~/components/ui/LoadingOverlay';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -10,7 +10,6 @@ interface AuthGuardProps {
 export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useFlowAuth();
 
-  // Show loading overlay while checking authentication status
   if (isLoading) {
     return (
       <LoadingOverlay className="min-h-screen bg-cosmiq-elements-background-depth-1">
@@ -27,11 +26,9 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
     );
   }
 
-  // Show wallet login if not authenticated
   if (!isAuthenticated) {
     return <WalletLogin />;
   }
 
-  // Show protected content if authenticated
   return <>{children}</>;
 };

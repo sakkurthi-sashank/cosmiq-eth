@@ -8,7 +8,7 @@ import { useChat } from 'ai/react';
 import { useAnimate } from 'framer-motion';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { cssTransition, toast, ToastContainer } from 'react-toastify';
-import { useMessageParser, usePromptEnhancer, useShortcuts } from '~/lib/hooks';
+import { useMessageParser, useShortcuts } from '~/lib/hooks';
 import { description, useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
@@ -116,8 +116,6 @@ export const ChatImpl = memo(
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [chatStarted, setChatStarted] = useState(initialMessages.length > 0);
-    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-    const [imageDataList, setImageDataList] = useState<string[]>([]);
     const [searchParams, setSearchParams] = useSearchParams();
     const [fakeLoading, setFakeLoading] = useState(false);
     const files = useStore(workbenchStore.files);
@@ -211,7 +209,6 @@ export const ChatImpl = memo(
       }
     }, [model, provider, searchParams]);
 
-    const { enhancingPrompt, promptEnhanced, enhancePrompt, resetEnhancer } = usePromptEnhancer();
     const { parsedMessages, parseMessages } = useMessageParser();
 
     const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
@@ -236,14 +233,6 @@ export const ChatImpl = memo(
         storeMessageHistory,
       });
     }, [messages, isLoading, parseMessages]);
-
-    const scrollTextArea = () => {
-      const textarea = textareaRef.current;
-
-      if (textarea) {
-        textarea.scrollTop = textarea.scrollHeight;
-      }
-    };
 
     const abort = () => {
       stop();
@@ -357,10 +346,6 @@ export const ChatImpl = memo(
                       type: 'text',
                       text: `[Model: ${model}]\n\n[Provider: ${provider.name}]\n\n${finalMessageContent}`,
                     },
-                    ...imageDataList.map((imageData) => ({
-                      type: 'image',
-                      image: imageData,
-                    })),
                   ] as any,
                 },
                 {
@@ -378,11 +363,6 @@ export const ChatImpl = memo(
               reload();
               setInput('');
               Cookies.remove(PROMPT_COOKIE_KEY);
-
-              setUploadedFiles([]);
-              setImageDataList([]);
-
-              resetEnhancer();
 
               textareaRef.current?.blur();
               setFakeLoading(false);
@@ -402,10 +382,6 @@ export const ChatImpl = memo(
                 type: 'text',
                 text: `[Model: ${model}]\n\n[Provider: ${provider.name}]\n\n${finalMessageContent}`,
               },
-              ...imageDataList.map((imageData) => ({
-                type: 'image',
-                image: imageData,
-              })),
             ] as any,
           },
         ]);
@@ -413,11 +389,6 @@ export const ChatImpl = memo(
         setFakeLoading(false);
         setInput('');
         Cookies.remove(PROMPT_COOKIE_KEY);
-
-        setUploadedFiles([]);
-        setImageDataList([]);
-
-        resetEnhancer();
 
         textareaRef.current?.blur();
 
@@ -441,10 +412,6 @@ export const ChatImpl = memo(
               type: 'text',
               text: `[Model: ${model}]\n\n[Provider: ${provider.name}]\n\n${userUpdateArtifact}${finalMessageContent}`,
             },
-            ...imageDataList.map((imageData) => ({
-              type: 'image',
-              image: imageData,
-            })),
           ] as any,
         });
 
@@ -457,21 +424,12 @@ export const ChatImpl = memo(
               type: 'text',
               text: `[Model: ${model}]\n\n[Provider: ${provider.name}]\n\n${finalMessageContent}`,
             },
-            ...imageDataList.map((imageData) => ({
-              type: 'image',
-              image: imageData,
-            })),
           ] as any,
         });
       }
 
       setInput('');
       Cookies.remove(PROMPT_COOKIE_KEY);
-
-      setUploadedFiles([]);
-      setImageDataList([]);
-
-      resetEnhancer();
 
       textareaRef.current?.blur();
     };
@@ -525,8 +483,6 @@ export const ChatImpl = memo(
         onStreamingChange={(streaming) => {
           streamingState.set(streaming);
         }}
-        enhancingPrompt={enhancingPrompt}
-        promptEnhanced={promptEnhanced}
         sendMessage={sendMessage}
         model={model}
         setModel={handleModelChange}
@@ -551,22 +507,6 @@ export const ChatImpl = memo(
             content: parsedMessages[i] || '',
           };
         })}
-        enhancePrompt={() => {
-          enhancePrompt(
-            input,
-            (input) => {
-              setInput(input);
-              scrollTextArea();
-            },
-            model,
-            provider,
-            apiKeys,
-          );
-        }}
-        uploadedFiles={uploadedFiles}
-        setUploadedFiles={setUploadedFiles}
-        imageDataList={imageDataList}
-        setImageDataList={setImageDataList}
         actionAlert={actionAlert}
         clearAlert={() => workbenchStore.clearAlert()}
         data={chatData}

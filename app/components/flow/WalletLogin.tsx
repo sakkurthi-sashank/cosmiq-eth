@@ -1,7 +1,7 @@
 import React from 'react';
-import { useFlowAuth } from '../../lib/contexts/FlowAuthContext';
-import { Button } from '../ui/Button';
-import { LoadingDots } from '../ui/LoadingDots';
+import { useFlowAuth } from '~/lib/contexts/FlowAuthContext';
+import { Button } from '~/components/ui/Button';
+import { LoadingDots } from '~/components/ui/LoadingDots';
 
 export const WalletLogin: React.FC = () => {
   const { login, isLoading, error } = useFlowAuth();
@@ -54,7 +54,7 @@ export const WalletLogin: React.FC = () => {
           >
             {isLoading ? (
               <div className="flex items-center justify-center space-x-2">
-                <LoadingDots />
+                <LoadingDots text={''} />
                 <span>Connecting...</span>
               </div>
             ) : (

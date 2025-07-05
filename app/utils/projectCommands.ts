@@ -72,12 +72,12 @@ export function createCommandsMessage(commands: ProjectCommands): Message | null
 
   if (commands.setupCommand) {
     commandString += `
-<boltAction type="shell">${commands.setupCommand}</boltAction>`;
+<cosmiqAction type="shell">${commands.setupCommand}</cosmiqAction>`;
   }
 
   if (commands.startCommand) {
     commandString += `
-<boltAction type="start">${commands.startCommand}</boltAction>
+<cosmiqAction type="start">${commands.startCommand}</cosmiqAction>
 `;
   }
 
@@ -85,17 +85,17 @@ export function createCommandsMessage(commands: ProjectCommands): Message | null
     role: 'assistant',
     content: `
 ${commands.followupMessage ? `\n\n${commands.followupMessage}` : ''}
-<boltArtifact id="project-setup" title="Project Setup">
+<cosmiqArtifact id="project-setup" title="Project Setup">
 ${commandString}
-</boltArtifact>`,
+</cosmiqArtifact>`,
     id: generateId(),
     createdAt: new Date(),
   };
 }
 
-export function escapeBoltArtifactTags(input: string) {
-  // Regular expression to match boltArtifact tags and their content
-  const regex = /(<boltArtifact[^>]*>)([\s\S]*?)(<\/boltArtifact>)/g;
+export function escapeCosmiqArtifactTags(input: string) {
+  // Regular expression to match cosmiqArtifact tags and their content
+  const regex = /(<cosmiqArtifact[^>]*>)([\s\S]*?)(<\/cosmiqArtifact>)/g;
 
   return input.replace(regex, (match, openTag, content, closeTag) => {
     // Escape the opening tag
@@ -109,9 +109,9 @@ export function escapeBoltArtifactTags(input: string) {
   });
 }
 
-export function escapeBoltAActionTags(input: string) {
-  // Regular expression to match boltArtifact tags and their content
-  const regex = /(<boltAction[^>]*>)([\s\S]*?)(<\/boltAction>)/g;
+export function escapeCosmiqAActionTags(input: string) {
+  // Regular expression to match cosmiqArtifact tags and their content
+  const regex = /(<cosmiqAction[^>]*>)([\s\S]*?)(<\/cosmiqAction>)/g;
 
   return input.replace(regex, (match, openTag, content, closeTag) => {
     // Escape the opening tag
@@ -125,8 +125,8 @@ export function escapeBoltAActionTags(input: string) {
   });
 }
 
-export function escapeBoltTags(input: string) {
-  return escapeBoltArtifactTags(escapeBoltAActionTags(input));
+export function escapeCosmiqTags(input: string) {
+  return escapeCosmiqArtifactTags(escapeCosmiqAActionTags(input));
 }
 
 // We have this seperate function to simplify the restore snapshot process in to one single artifact.
@@ -140,12 +140,12 @@ export function createCommandActionsString(commands: ProjectCommands): string {
 
   if (commands.setupCommand) {
     commandString += `
-<boltAction type="shell">${commands.setupCommand}</boltAction>`;
+<cosmiqAction type="shell">${commands.setupCommand}</cosmiqAction>`;
   }
 
   if (commands.startCommand) {
     commandString += `
-<boltAction type="start">${commands.startCommand}</boltAction>
+<cosmiqAction type="start">${commands.startCommand}</cosmiqAction>
 `;
   }
 

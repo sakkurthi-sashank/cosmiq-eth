@@ -30,7 +30,7 @@ export function UserMessage({ content }: UserMessageProps) {
                 loading="eager"
                 decoding="sync"
               />
-              <span className="text-bolt-elements-textPrimary text-sm">
+              <span className="text-cosmiq-elements-textPrimary text-sm">
                 {profile?.username ? profile.username : ''}
               </span>
             </div>
@@ -64,6 +64,6 @@ export function UserMessage({ content }: UserMessageProps) {
 }
 
 function stripMetadata(content: string) {
-  const artifactRegex = /<boltArtifact\s+[^>]*>[\s\S]*?<\/boltArtifact>/gm;
+  const artifactRegex = /<cosmiqArtifact\s+[^>]*>[\s\S]*?<\/cosmiqArtifact>/gm;
   return content.replace(MODEL_REGEX, '').replace(PROVIDER_REGEX, '').replace(artifactRegex, '');
 }

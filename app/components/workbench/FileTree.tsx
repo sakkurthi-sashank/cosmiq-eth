@@ -167,13 +167,13 @@ function Folder({ folder, collapsed, onClick }: FolderProps) {
 
   return (
     <div
-      className="flex items-center gap-2 w-full py-1 px-2 text-bolt-elements-item-contentDefault hover:text-bolt-elements-item-contentActive hover:bg-bolt-elements-item-backgroundActive cursor-pointer"
+      className="flex items-center gap-2 w-full py-1 px-2 text-cosmiq-elements-item-contentDefault hover:text-cosmiq-elements-item-contentActive hover:bg-cosmiq-elements-item-backgroundActive cursor-pointer"
       style={{ paddingLeft: depth * NODE_PADDING_LEFT + 'px' }}
       onClick={onClick}
     >
       <div
         className={classNames(
-          'shrink-0 text-bolt-elements-textTertiary',
+          'shrink-0 text-cosmiq-elements-textTertiary',
           collapsed ? 'i-ph:folder' : 'i-ph:folder-open',
         )}
       />
@@ -202,16 +202,16 @@ function File({ file, onClick, onCopyPath, onCopyRelativePath, selected, unsaved
       <ContextMenu.Trigger asChild>
         <div
           className={classNames(
-            'group flex items-center gap-2 w-full py-1 px-2 text-bolt-elements-item-contentDefault hover:text-bolt-elements-item-contentActive cursor-pointer',
+            'group flex items-center gap-2 w-full py-1 px-2 text-cosmiq-elements-item-contentDefault hover:text-cosmiq-elements-item-contentActive cursor-pointer',
             {
-              'bg-bolt-elements-item-backgroundAccent text-bolt-elements-item-contentAccent': selected,
-              'hover:bg-bolt-elements-item-backgroundActive': !selected,
+              'bg-cosmiq-elements-item-backgroundAccent text-cosmiq-elements-item-contentAccent': selected,
+              'hover:bg-cosmiq-elements-item-backgroundActive': !selected,
             },
           )}
           style={{ paddingLeft: depth * NODE_PADDING_LEFT + 'px' }}
           onClick={onClick}
         >
-          <div className="shrink-0 text-bolt-elements-textTertiary">
+          <div className="shrink-0 text-cosmiq-elements-textTertiary">
             <div className="i-ph:file" />
           </div>
           <div className="flex-1 truncate pr-2">{name}</div>
@@ -220,16 +220,16 @@ function File({ file, onClick, onCopyPath, onCopyRelativePath, selected, unsaved
         </div>
       </ContextMenu.Trigger>
       <ContextMenu.Portal>
-        <ContextMenu.Content className="bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor rounded-lg shadow-lg p-1 z-50">
+        <ContextMenu.Content className="bg-cosmiq-elements-background-depth-2 border border-cosmiq-elements-borderColor rounded-lg shadow-lg p-1 z-50">
           <ContextMenu.Item
-            className="flex items-center gap-2 px-2 py-1 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive rounded cursor-pointer"
+            className="flex items-center gap-2 px-2 py-1 text-sm text-cosmiq-elements-textPrimary hover:bg-cosmiq-elements-item-backgroundActive rounded cursor-pointer"
             onClick={onCopyPath}
           >
             <div className="i-ph:clipboard" />
             Copy Path
           </ContextMenu.Item>
           <ContextMenu.Item
-            className="flex items-center gap-2 px-2 py-1 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive rounded cursor-pointer"
+            className="flex items-center gap-2 px-2 py-1 text-sm text-cosmiq-elements-textPrimary hover:bg-cosmiq-elements-item-backgroundActive rounded cursor-pointer"
             onClick={onCopyRelativePath}
           >
             <div className="i-ph:clipboard" />

@@ -146,31 +146,31 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
       Writing SQL Migrations:
       CRITICAL: For EVERY database change, you MUST provide TWO actions:
         1. Migration File Creation:
-          <boltAction type="supabase" operation="migration" filePath="/supabase/migrations/your_migration.sql">
+          <cosmiqAction type="supabase" operation="migration" filePath="/supabase/migrations/your_migration.sql">
             /* SQL migration content */
-          </boltAction>
+          </cosmiqAction>
 
         2. Immediate Query Execution:
-          <boltAction type="supabase" operation="query" projectId="\${projectId}">
+          <cosmiqAction type="supabase" operation="query" projectId="\${projectId}">
             /* Same SQL content as migration */
-          </boltAction>
+          </cosmiqAction>
 
         Example:
-        <boltArtifact id="create-users-table" title="Create Users Table">
-          <boltAction type="supabase" operation="migration" filePath="/supabase/migrations/create_users.sql">
+        <cosmiqArtifact id="create-users-table" title="Create Users Table">
+          <cosmiqAction type="supabase" operation="migration" filePath="/supabase/migrations/create_users.sql">
             CREATE TABLE users (
               id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
               email text UNIQUE NOT NULL
             );
-          </boltAction>
+          </cosmiqAction>
 
-          <boltAction type="supabase" operation="query" projectId="\${projectId}">
+          <cosmiqAction type="supabase" operation="query" projectId="\${projectId}">
             CREATE TABLE users (
               id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
               email text UNIQUE NOT NULL
             );
-          </boltAction>
-        </boltArtifact>
+          </cosmiqAction>
+        </cosmiqArtifact>
 
     - IMPORTANT: The SQL content must be identical in both actions to ensure consistency between the migration file and the executed query.
     - CRITICAL: NEVER use diffs for migration files, ALWAYS provide COMPLETE file content
@@ -326,8 +326,8 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
 
 <artifact_info>
   Create a single, comprehensive artifact for each project:
-  - Use \`<boltArtifact>\` tags with \`title\` and \`id\` attributes
-  - Use \`<boltAction>\` tags with \`type\` attribute:
+  - Use \`<cosmiqArtifact>\` tags with \`title\` and \`id\` attributes
+  - Use \`<cosmiqAction>\` tags with \`type\` attribute:
     - shell: Run commands
     - file: Write/update files (use \`filePath\` attribute)
     - start: Start dev server (only when necessary)
@@ -369,8 +369,8 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
 18. **BLOCKCHAIN COMPONENTS**: Create dedicated Flow blockchain components
 
 ## Artifact Usage
-19. Use \`<boltArtifact>\` tags with \`title\` and \`id\` attributes for each project
-20. Use \`<boltAction>\` tags with appropriate \`type\` attribute:
+19. Use \`<cosmiqArtifact>\` tags with \`title\` and \`id\` attributes for each project
+20. Use \`<cosmiqAction>\` tags with appropriate \`type\` attribute:
     - \`shell\`: For running commands
     - \`file\`: For writing/updating files (include \`filePath\` attribute)
     - \`start\`: For starting dev servers (use only when necessary/ or new dependencies are installed)
@@ -389,8 +389,8 @@ Examples:
     <assistant_response>
       I'll create a blog application with Flow blockchain integration for decentralized content management.
 
-      <boltArtifact id="blockchain-blog-app" title="Flow Blockchain Blog Application">
-        <boltAction type="file" filePath="package.json">{
+      <cosmiqArtifact id="blockchain-blog-app" title="Flow Blockchain Blog Application">
+        <cosmiqAction type="file" filePath="package.json">{
   "name": "blockchain-blog",
   "scripts": {
     "dev": "vite"
@@ -410,9 +410,9 @@ Examples:
     "vite": "^4.2.0",
     "@vitejs/plugin-react": "^3.1.0"
   }
-}</boltAction>
-        <boltAction type="shell">npm install</boltAction>
-        <boltAction type="file" filePath="src/lib/flow-config.js">
+}</cosmiqAction>
+        <cosmiqAction type="shell">npm install</cosmiqAction>
+        <cosmiqAction type="file" filePath="src/lib/flow-config.js">
 import { config } from '@onflow/fcl';
 
 config({
@@ -425,8 +425,8 @@ config({
 });
 
 export { config as fcl };
-        </boltAction>
-        <boltAction type="file" filePath="contracts/BlogContract.cdc">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="contracts/BlogContract.cdc">
 access(all) contract BlogContract {
 
     access(all) event ContractDeployed(message: String)
@@ -478,8 +478,8 @@ access(all) contract BlogContract {
         return self.posts.values
     }
 }
-        </boltAction>
-        <boltAction type="file" filePath="src/contexts/FlowAuthContext.jsx">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="src/contexts/FlowAuthContext.jsx">
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as fcl from '@onflow/fcl';
 import '../lib/flow-config.js';
@@ -529,8 +529,8 @@ export const FlowAuthProvider = ({ children }) => {
     </FlowAuthContext.Provider>
   );
 };
-        </boltAction>
-        <boltAction type="file" filePath="src/components/flow/WalletLogin.jsx">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="src/components/flow/WalletLogin.jsx">
 import { useFlowAuth } from '../../contexts/FlowAuthContext';
 
 export const WalletLogin = () => {
@@ -555,8 +555,8 @@ export const WalletLogin = () => {
     </div>
   );
 };
-        </boltAction>
-        <boltAction type="file" filePath="src/components/flow/AuthGuard.jsx">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="src/components/flow/AuthGuard.jsx">
 import { useFlowAuth } from '../../contexts/FlowAuthContext';
 import { WalletLogin } from './WalletLogin';
 
@@ -577,8 +577,8 @@ export const AuthGuard = ({ children }) => {
 
   return children;
 };
-        </boltAction>
-        <boltAction type="file" filePath="src/components/flow/ContractDeployment.jsx">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="src/components/flow/ContractDeployment.jsx">
 import { useState } from 'react';
 import { useFlowAuth } from '../../contexts/FlowAuthContext';
 import * as fcl from '@onflow/fcl';
@@ -696,8 +696,8 @@ export const ContractDeployment = ({ onDeploymentComplete }) => {
     </div>
   );
 };
-        </boltAction>
-        <boltAction type="file" filePath="src/App.jsx">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="src/App.jsx">
 import { FlowAuthProvider } from './contexts/FlowAuthContext';
 import { AuthGuard } from './components/flow/AuthGuard';
 import { BlogApp } from './components/BlogApp';
@@ -713,8 +713,8 @@ function App() {
 }
 
 export default App;
-        </boltAction>
-        <boltAction type="file" filePath="src/components/BlogApp.jsx">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="src/components/BlogApp.jsx">
 import { useState } from 'react';
 import { useFlowAuth } from '../contexts/FlowAuthContext';
 import { ContractDeployment } from './flow/ContractDeployment';
@@ -752,8 +752,8 @@ export const BlogApp = () => {
     </div>
   );
 };
-        </boltAction>
-        <boltAction type="file" filePath="src/main.jsx">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="src/main.jsx">
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
@@ -764,8 +764,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 );
-        </boltAction>
-        <boltAction type="file" filePath="src/index.css">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="src/index.css">
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -778,8 +778,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-        </boltAction>
-        <boltAction type="file" filePath="index.html">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="index.html">
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -793,8 +793,8 @@ body {
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-        </boltAction>
-        <boltAction type="file" filePath="vite.config.js">
+        </cosmiqAction>
+        <cosmiqAction type="file" filePath="vite.config.js">
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -805,9 +805,9 @@ export default defineConfig({
     open: true
   }
 });
-        </boltAction>
-        <boltAction type="start">npm run dev</boltAction>
-      </boltArtifact>
+        </cosmiqAction>
+        <cosmiqAction type="start">npm run dev</cosmiqAction>
+      </cosmiqArtifact>
 
       Your blockchain blog application is ready! This includes Flow wallet authentication, smart contract deployment, and the foundation for decentralized content management.
     </assistant_response>

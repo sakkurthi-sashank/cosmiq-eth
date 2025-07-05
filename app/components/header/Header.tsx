@@ -11,11 +11,11 @@ export function Header() {
     <header
       className={classNames('flex items-center justify-between px-4 border-b h-[var(--header-height)]', {
         'border-transparent': !chat.started,
-        'border-bolt-elements-borderColor': chat.started,
+        'border-cosmiq-elements-borderColor': chat.started,
       })}
     >
       <div className="flex-1"></div>
-      <div className="text-xl font-bold text-bolt-elements-textPrimary">bolt</div>
+      <div className="text-xl font-bold text-cosmiq-elements-textPrimary">cosmiq</div>
       <div className="flex-1 flex justify-end">
         <ClientOnly fallback={null}>{() => <FlowAuthHeader />}</ClientOnly>
       </div>

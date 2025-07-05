@@ -3,7 +3,7 @@ import type { Template } from '~/types/template';
 
 export const WORK_DIR_NAME = 'project';
 export const WORK_DIR = `/home/${WORK_DIR_NAME}`;
-export const MODIFICATIONS_TAG_NAME = 'bolt_file_modifications';
+export const MODIFICATIONS_TAG_NAME = 'cosmiq_file_modifications';
 export const MODEL_REGEX = /^\[Model: (.*?)\]\n\n/;
 export const PROVIDER_REGEX = /\[Provider: (.*?)\]\n\n/;
 export const DEFAULT_MODEL = 'claude-3-7-sonnet-20250219';
@@ -26,9 +26,9 @@ export const STARTER_TEMPLATES: Template[] = [
     name: 'NextJS Shadcn',
     label: 'Next.js with shadcn/ui',
     description: 'Next.js starter fullstack template integrated with shadcn/ui components and styling system',
-    githubRepo: 'xKevIsDev/bolt-nextjs-shadcn-template',
+    githubRepo: 'xKevIsDev/cosmiq-nextjs-shadcn-template',
     tags: ['nextjs', 'react', 'typescript', 'shadcn', 'tailwind'],
-    icon: 'i-bolt:nextjs',
+    icon: 'i-cosmiq:nextjs',
   },
   {
     name: 'Vanilla Vite',
@@ -36,22 +36,22 @@ export const STARTER_TEMPLATES: Template[] = [
     description: 'Minimal Vite starter template for vanilla JavaScript projects',
     githubRepo: 'xKevIsDev/vanilla-vite-template',
     tags: ['vite', 'vanilla-js', 'minimal'],
-    icon: 'i-bolt:vite',
+    icon: 'i-cosmiq:vite',
   },
   {
     name: 'Vite React',
     label: 'React + Vite + typescript',
     description: 'React starter template powered by Vite for fast development experience',
-    githubRepo: 'xKevIsDev/bolt-vite-react-ts-template',
+    githubRepo: 'xKevIsDev/cosmiq-vite-react-ts-template',
     tags: ['react', 'vite', 'frontend', 'website', 'app'],
-    icon: 'i-bolt:react',
+    icon: 'i-cosmiq:react',
   },
   {
     name: 'Vite Typescript',
     label: 'Vite + TypeScript',
     description: 'Vite starter template with TypeScript configuration for type-safe development',
-    githubRepo: 'xKevIsDev/bolt-vite-ts-template',
+    githubRepo: 'xKevIsDev/cosmiq-vite-ts-template',
     tags: ['vite', 'typescript', 'minimal'],
-    icon: 'i-bolt:typescript',
+    icon: 'i-cosmiq:typescript',
   },
 ];

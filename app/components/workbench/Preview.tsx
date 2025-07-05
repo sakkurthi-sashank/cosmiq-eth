@@ -78,12 +78,12 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
       {isPortDropdownOpen && (
         <div className="z-iframe-overlay w-full h-full absolute" onClick={() => setIsPortDropdownOpen(false)} />
       )}
-      <div className="bg-bolt-elements-background-depth-2 p-2 flex items-center gap-2">
+      <div className="bg-cosmiq-elements-background-depth-2 p-2 flex items-center gap-2">
         <div className="flex items-center gap-2">
           <IconButton icon="i-ph:arrow-clockwise" onClick={reloadPreview} />
         </div>
 
-        <div className="flex-grow flex items-center gap-1 bg-bolt-elements-preview-addressBar-background border border-bolt-elements-borderColor text-bolt-elements-preview-addressBar-text rounded-full px-1 py-1 text-sm hover:bg-bolt-elements-preview-addressBar-backgroundHover hover:focus-within:bg-bolt-elements-preview-addressBar-backgroundActive focus-within:bg-bolt-elements-preview-addressBar-backgroundActive focus-within-border-bolt-elements-borderColorActive focus-within:text-bolt-elements-preview-addressBar-textActive">
+        <div className="flex-grow flex items-center gap-1 bg-cosmiq-elements-preview-addressBar-background border border-cosmiq-elements-borderColor text-cosmiq-elements-preview-addressBar-text rounded-full px-1 py-1 text-sm hover:bg-cosmiq-elements-preview-addressBar-backgroundHover hover:focus-within:bg-cosmiq-elements-preview-addressBar-backgroundActive focus-within:bg-cosmiq-elements-preview-addressBar-backgroundActive focus-within-border-cosmiq-elements-borderColorActive focus-within:text-cosmiq-elements-preview-addressBar-textActive">
           <PortDropdown
             activePreviewIndex={activePreviewIndex}
             setActivePreviewIndex={setActivePreviewIndex}
@@ -131,19 +131,19 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
         </div>
       </div>
 
-      <div className="flex-1 border-t border-bolt-elements-borderColor flex justify-center items-center overflow-auto">
-        <div className="w-full h-full overflow-auto bg-bolt-elements-background-depth-1 relative">
+      <div className="flex-1 border-t border-cosmiq-elements-borderColor flex justify-center items-center overflow-auto">
+        <div className="w-full h-full overflow-auto bg-cosmiq-elements-background-depth-1 relative">
           {activePreview ? (
             <iframe
               ref={iframeRef}
               title="preview"
-              className="border-none w-full h-full bg-bolt-elements-background-depth-1"
+              className="border-none w-full h-full bg-cosmiq-elements-background-depth-1"
               src={iframeUrl}
               sandbox="allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation allow-same-origin"
               allow="cross-origin-isolated"
             />
           ) : (
-            <div className="flex w-full h-full justify-center items-center bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary">
+            <div className="flex w-full h-full justify-center items-center bg-cosmiq-elements-background-depth-1 text-cosmiq-elements-textPrimary">
               No preview available
             </div>
           )}

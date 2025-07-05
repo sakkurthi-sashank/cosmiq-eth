@@ -105,15 +105,15 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
         variants={workbenchVariants}
         className="z-workbench relative h-full"
       >
-        <div className="h-full border-l border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 flex flex-col">
-          <div className="flex items-center px-3 py-2 border-b border-bolt-elements-borderColor">
+        <div className="h-full border-l border-cosmiq-elements-borderColor bg-cosmiq-elements-background-depth-2 flex flex-col">
+          <div className="flex items-center px-3 py-2 border-b border-cosmiq-elements-borderColor">
             <div className="flex items-center gap-2">
               <button
                 className={classNames(
                   'px-3 py-1 rounded-md text-sm font-medium transition-colors',
                   selectedView === 'code'
-                    ? 'bg-bolt-elements-item-backgroundActive text-bolt-elements-textPrimary'
-                    : 'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive'
+                    ? 'bg-cosmiq-elements-item-backgroundActive text-cosmiq-elements-textPrimary'
+                    : 'text-cosmiq-elements-textSecondary hover:text-cosmiq-elements-textPrimary hover:bg-cosmiq-elements-item-backgroundActive'
                 )}
                 onClick={() => setSelectedView('code')}
               >
@@ -124,8 +124,8 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
                   className={classNames(
                     'px-3 py-1 rounded-md text-sm font-medium transition-colors',
                     selectedView === 'preview'
-                      ? 'bg-bolt-elements-item-backgroundActive text-bolt-elements-textPrimary'
-                      : 'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive'
+                      ? 'bg-cosmiq-elements-item-backgroundActive text-cosmiq-elements-textPrimary'
+                      : 'text-cosmiq-elements-textSecondary hover:text-cosmiq-elements-textPrimary hover:bg-cosmiq-elements-item-backgroundActive'
                   )}
                   onClick={() => setSelectedView('preview')}
                 >

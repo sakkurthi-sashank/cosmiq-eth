@@ -28,7 +28,7 @@ describe('StreamingMessageParser', () => {
       ['Foo bar <', 'Foo bar '],
       ['Foo bar <p', 'Foo bar <p'],
       [['Foo bar <', 's', 'p', 'an>some text</span>'], 'Foo bar <span>some text</span>'],
-    ])('should correctly parse chunks and strip out bolt artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out cosmiq artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -38,13 +38,13 @@ describe('StreamingMessageParser', () => {
       ['Foo bar <b', 'Foo bar '],
       ['Foo bar <ba', 'Foo bar <ba'],
       ['Foo bar <bol', 'Foo bar '],
-      ['Foo bar <bolt', 'Foo bar '],
-      ['Foo bar <bolta', 'Foo bar <bolta'],
-      ['Foo bar <boltA', 'Foo bar '],
-      ['Foo bar <boltArtifacs></boltArtifact>', 'Foo bar <boltArtifacs></boltArtifact>'],
-      ['Before <oltArtfiact>foo</boltArtifact> After', 'Before <oltArtfiact>foo</boltArtifact> After'],
-      ['Before <boltArtifactt>foo</boltArtifact> After', 'Before <boltArtifactt>foo</boltArtifact> After'],
-    ])('should correctly parse chunks and strip out bolt artifacts (%#)', (input, expected) => {
+      ['Foo bar <cosmiq', 'Foo bar '],
+      ['Foo bar <cosmiqa', 'Foo bar <cosmiqa'],
+      ['Foo bar <cosmiqA', 'Foo bar '],
+      ['Foo bar <cosmiqArtifacs></cosmiqArtifact>', 'Foo bar <cosmiqArtifacs></cosmiqArtifact>'],
+      ['Before <oltArtfiact>foo</cosmiqArtifact> After', 'Before <oltArtfiact>foo</cosmiqArtifact> After'],
+      ['Before <cosmiqArtifactt>foo</cosmiqArtifact> After', 'Before <cosmiqArtifactt>foo</cosmiqArtifact> After'],
+    ])('should correctly parse chunks and strip out cosmiq artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -52,7 +52,7 @@ describe('StreamingMessageParser', () => {
   describe('valid artifacts without actions', () => {
     it.each<[string | string[], ExpectedResult | string]>([
       [
-        'Some text before <boltArtifact title="Some title" id="artifact_1">foo bar</boltArtifact> Some more text',
+        'Some text before <cosmiqArtifact title="Some title" id="artifact_1">foo bar</cosmiqArtifact> Some more text',
         {
           output: 'Some text before  Some more text',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 0, onActionClose: 0 },
@@ -60,9 +60,9 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <cosmiqArti',
           'fact',
-          ' title="Some title" id="artifact_1" type="bundled" >foo</boltArtifact> Some more text',
+          ' title="Some title" id="artifact_1" type="bundled" >foo</cosmiqArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -71,12 +71,12 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <cosmiqArti',
           'fac',
           't title="Some title" id="artifact_1"',
           ' ',
           '>',
-          'foo</boltArtifact> Some more text',
+          'foo</cosmiqArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -85,11 +85,11 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <cosmiqArti',
           'fact',
           ' title="Some title" id="artifact_1"',
           ' >fo',
-          'o</boltArtifact> Some more text',
+          'o</cosmiqArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -98,13 +98,13 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <cosmiqArti',
           'fact tit',
           'le="Some ',
           'title" id="artifact_1">fo',
           'o',
           '<',
-          '/boltArtifact> Some more text',
+          '/cosmiqArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -113,11 +113,11 @@ describe('StreamingMessageParser', () => {
       ],
       [
         [
-          'Some text before <boltArti',
+          'Some text before <cosmiqArti',
           'fact title="Some title" id="artif',
           'act_1">fo',
           'o<',
-          '/boltArtifact> Some more text',
+          '/cosmiqArtifact> Some more text',
         ],
         {
           output: 'Some text before  Some more text',
@@ -125,13 +125,13 @@ describe('StreamingMessageParser', () => {
         },
       ],
       [
-        'Before <boltArtifact title="Some title" id="artifact_1">foo</boltArtifact> After',
+        'Before <cosmiqArtifact title="Some title" id="artifact_1">foo</cosmiqArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 0, onActionClose: 0 },
         },
       ],
-    ])('should correctly parse chunks and strip out bolt artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out cosmiq artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });
@@ -139,20 +139,20 @@ describe('StreamingMessageParser', () => {
   describe('valid artifacts with actions', () => {
     it.each<[string | string[], ExpectedResult | string]>([
       [
-        'Before <boltArtifact title="Some title" id="artifact_1"><boltAction type="shell">npm install</boltAction></boltArtifact> After',
+        'Before <cosmiqArtifact title="Some title" id="artifact_1"><cosmiqAction type="shell">npm install</cosmiqAction></cosmiqArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 1, onActionClose: 1 },
         },
       ],
       [
-        'Before <boltArtifact title="Some title" id="artifact_1"><boltAction type="shell">npm install</boltAction><boltAction type="file" filePath="index.js">some content</boltAction></boltArtifact> After',
+        'Before <cosmiqArtifact title="Some title" id="artifact_1"><cosmiqAction type="shell">npm install</cosmiqAction><cosmiqAction type="file" filePath="index.js">some content</cosmiqAction></cosmiqArtifact> After',
         {
           output: 'Before  After',
           callbacks: { onArtifactOpen: 1, onArtifactClose: 1, onActionOpen: 2, onActionClose: 2 },
         },
       ],
-    ])('should correctly parse chunks and strip out bolt artifacts (%#)', (input, expected) => {
+    ])('should correctly parse chunks and strip out cosmiq artifacts (%#)', (input, expected) => {
       runTest(input, expected);
     });
   });

@@ -9,7 +9,7 @@ export const flowConfig = {
   'app.detail.title': 'CosmiqETH',
   'app.detail.icon': 'https://cosmiq-eth.vercel.app/favicon.svg',
   'app.detail.description':
-  'A Web3-inspired builder platform that generates working web applications from natural language prompts',
+    'A Web3-inspired builder platform that generates working web applications from natural language prompts',
   'wallet.autoConnect': true,
   'walletconnect.projectId': '891352ea01a6423c5e916692be96aafc',
 };

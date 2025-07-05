@@ -253,20 +253,20 @@ access(all) contract HelloWorld {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="bg-bolt-elements-background-depth-2 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-bolt-elements-textPrimary mb-4">🚀 Smart Contract Deployment</h2>
+      <div className="bg-cosmiq-elements-background-depth-2 rounded-lg p-6">
+        <h2 className="text-2xl font-bold text-cosmiq-elements-textPrimary mb-4">🚀 Smart Contract Deployment</h2>
 
         <div className="space-y-4">
-          <div className="bg-bolt-elements-background-depth-3 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-2">HelloWorld Contract</h3>
-            <p className="text-bolt-elements-textSecondary mb-4">
+          <div className="bg-cosmiq-elements-background-depth-3 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-2">HelloWorld Contract</h3>
+            <p className="text-cosmiq-elements-textSecondary mb-4">
               Deploy a simple Hello World smart contract to the Flow blockchain. This contract will log messages to the
               console when deployed and executed.
             </p>
 
             {isAuthenticated ? (
               <div className="space-y-3">
-                <div className="text-sm text-bolt-elements-textSecondary">
+                <div className="text-sm text-cosmiq-elements-textSecondary">
                   <strong>Connected Account:</strong> {user?.addr}
                 </div>
 
@@ -286,7 +286,7 @@ access(all) contract HelloWorld {
                 </Button>
               </div>
             ) : (
-              <div className="text-bolt-elements-textSecondary">
+              <div className="text-cosmiq-elements-textSecondary">
                 Please connect your Flow wallet to deploy the contract.
               </div>
             )}
@@ -302,19 +302,19 @@ access(all) contract HelloWorld {
 
           {/* Deployment Result */}
           {deploymentResult && (
-            <div className="bg-bolt-elements-background-depth-3 rounded-lg p-4 space-y-3">
-              <h3 className="text-lg font-semibold text-bolt-elements-textPrimary">📊 Deployment Status</h3>
+            <div className="bg-cosmiq-elements-background-depth-3 rounded-lg p-4 space-y-3">
+              <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary">📊 Deployment Status</h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-bolt-elements-textSecondary">Transaction ID:</p>
-                  <p className="font-mono text-xs text-bolt-elements-textPrimary break-all">
+                  <p className="text-sm text-cosmiq-elements-textSecondary">Transaction ID:</p>
+                  <p className="font-mono text-xs text-cosmiq-elements-textPrimary break-all">
                     {deploymentResult.transactionId}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-bolt-elements-textSecondary">Status:</p>
+                  <p className="text-sm text-cosmiq-elements-textSecondary">Status:</p>
                   <p className={`font-semibold ${getStatusColor(deploymentResult.status.status)}`}>
                     {deploymentResult.status.statusString} ({deploymentResult.status.status})
                   </p>
@@ -330,11 +330,11 @@ access(all) contract HelloWorld {
 
               {deploymentResult.events && deploymentResult.events.length > 0 && (
                 <div>
-                  <p className="text-sm text-bolt-elements-textSecondary mb-2">Events:</p>
-                  <div className="bg-bolt-elements-background-depth-4 rounded p-3 max-h-32 overflow-y-auto">
+                  <p className="text-sm text-cosmiq-elements-textSecondary mb-2">Events:</p>
+                  <div className="bg-cosmiq-elements-background-depth-4 rounded p-3 max-h-32 overflow-y-auto">
                     {deploymentResult.events.map((event, index) => (
-                      <div key={index} className="text-xs text-bolt-elements-textSecondary mb-1">
-                        <span className="text-bolt-elements-textPrimary">{event.type}:</span>
+                      <div key={index} className="text-xs text-cosmiq-elements-textSecondary mb-1">
+                        <span className="text-cosmiq-elements-textPrimary">{event.type}:</span>
                         <span className="ml-2">{JSON.stringify(event.data)}</span>
                       </div>
                     ))}
@@ -345,10 +345,10 @@ access(all) contract HelloWorld {
           )}
 
           {/* Contract Code Preview */}
-          <div className="bg-bolt-elements-background-depth-3 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-3">📝 Contract Code Preview</h3>
-            <div className="bg-bolt-elements-background-depth-4 rounded p-3 max-h-64 overflow-y-auto">
-              <pre className="text-xs text-bolt-elements-textSecondary whitespace-pre-wrap">{contractCode}</pre>
+          <div className="bg-cosmiq-elements-background-depth-3 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-3">📝 Contract Code Preview</h3>
+            <div className="bg-cosmiq-elements-background-depth-4 rounded p-3 max-h-64 overflow-y-auto">
+              <pre className="text-xs text-cosmiq-elements-textSecondary whitespace-pre-wrap">{contractCode}</pre>
             </div>
           </div>
         </div>

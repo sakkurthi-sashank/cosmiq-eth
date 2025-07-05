@@ -11,7 +11,7 @@ import { Button } from '~/components/ui/Button';
 export const loader = () => json({});
 
 /**
- * Landing page component for bolt
+ * Landing page component for cosmiq
  * A Web3-inspired builder platform that generates working web applications from natural language prompts
  */
 export default function Index() {
@@ -26,7 +26,7 @@ export default function Index() {
           <div className="fixed top-4 right-4 z-50">
             <Button
               onClick={() => setShowFlowDemo(false)}
-              className="bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3 text-bolt-elements-textPrimary border border-bolt-elements-borderColor rounded-lg px-4 py-2 shadow-lg"
+              className="bg-cosmiq-elements-background-depth-2 hover:bg-cosmiq-elements-background-depth-3 text-cosmiq-elements-textPrimary border border-cosmiq-elements-borderColor rounded-lg px-4 py-2 shadow-lg"
             >
               ← Back to Chat
             </Button>
@@ -38,7 +38,7 @@ export default function Index() {
 
   return (
     <AuthGuard>
-      <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1">
+      <div className="flex flex-col h-full w-full bg-cosmiq-elements-background-depth-1">
         <Header />
 
         {/* Flow Demo Button */}

@@ -31,21 +31,21 @@ export const FlowAuthHeader: React.FC = () => {
         }
       >
         <div className="w-72 p-4 space-y-4">
-          <div className="border-b border-bolt-elements-borderColor pb-4">
-            <h3 className="font-medium text-bolt-elements-textPrimary mb-2">Flow Wallet Connected</h3>
+          <div className="border-b border-cosmiq-elements-borderColor pb-4">
+            <h3 className="font-medium text-cosmiq-elements-textPrimary mb-2">Flow Wallet Connected</h3>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-bolt-elements-textSecondary">Address:</span>
-                <code className="text-sm bg-bolt-elements-background-depth-2 px-2 py-1 rounded">
+                <span className="text-sm text-cosmiq-elements-textSecondary">Address:</span>
+                <code className="text-sm bg-cosmiq-elements-background-depth-2 px-2 py-1 rounded">
                   {truncatedAddress}
                 </code>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-bolt-elements-textSecondary">Network:</span>
-                <span className="text-sm text-bolt-elements-textPrimary">Flow Testnet</span>
+                <span className="text-sm text-cosmiq-elements-textSecondary">Network:</span>
+                <span className="text-sm text-cosmiq-elements-textPrimary">Flow Testnet</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-bolt-elements-textSecondary">Status:</span>
+                <span className="text-sm text-cosmiq-elements-textSecondary">Status:</span>
                 <span className="text-sm text-green-500 flex items-center">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
                   Connected

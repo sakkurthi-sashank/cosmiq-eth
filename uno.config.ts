@@ -5,7 +5,7 @@ import { defineConfig, presetIcons, presetUno, transformerDirectives } from 'uno
 
 const iconPaths = globSync('./icons/*.svg');
 
-const collectionName = 'bolt';
+const collectionName = 'cosmiq';
 
 const customIconCollection = iconPaths.reduce(
   (acc, iconPath) => {
@@ -98,11 +98,11 @@ const COLOR_PRIMITIVES = {
 };
 
 export default defineConfig({
-  safelist: [...Object.keys(customIconCollection[collectionName] || {}).map((x) => `i-bolt:${x}`)],
+  safelist: [...Object.keys(customIconCollection[collectionName] || {}).map((x) => `i-cosmiq:${x}`)],
   shortcuts: {
-    'bolt-ease-cubic-bezier': 'ease-[cubic-bezier(0.4,0,0.2,1)]',
-    'transition-theme': 'transition-[background-color,border-color,color] duration-150 bolt-ease-cubic-bezier',
-    kdb: 'bg-bolt-elements-code-background text-bolt-elements-code-text py-1 px-1.5 rounded-md',
+    'cosmiq-ease-cubic-bezier': 'ease-[cubic-bezier(0.4,0,0.2,1)]',
+    'transition-theme': 'transition-[background-color,border-color,color] duration-150 cosmiq-ease-cubic-bezier',
+    kdb: 'bg-cosmiq-elements-code-background text-cosmiq-elements-code-text py-1 px-1.5 rounded-md',
     'max-w-chat': 'max-w-[var(--chat-max-width)]',
   },
   rules: [
@@ -115,115 +115,115 @@ export default defineConfig({
   theme: {
     colors: {
       ...COLOR_PRIMITIVES,
-      bolt: {
+      cosmiq: {
         elements: {
-          borderColor: 'var(--bolt-elements-borderColor)',
-          borderColorActive: 'var(--bolt-elements-borderColorActive)',
+          borderColor: 'var(--cosmiq-elements-borderColor)',
+          borderColorActive: 'var(--cosmiq-elements-borderColorActive)',
           background: {
             depth: {
-              1: 'var(--bolt-elements-bg-depth-1)',
-              2: 'var(--bolt-elements-bg-depth-2)',
-              3: 'var(--bolt-elements-bg-depth-3)',
-              4: 'var(--bolt-elements-bg-depth-4)',
+              1: 'var(--cosmiq-elements-bg-depth-1)',
+              2: 'var(--cosmiq-elements-bg-depth-2)',
+              3: 'var(--cosmiq-elements-bg-depth-3)',
+              4: 'var(--cosmiq-elements-bg-depth-4)',
             },
           },
-          textPrimary: 'var(--bolt-elements-textPrimary)',
-          textSecondary: 'var(--bolt-elements-textSecondary)',
-          textTertiary: 'var(--bolt-elements-textTertiary)',
+          textPrimary: 'var(--cosmiq-elements-textPrimary)',
+          textSecondary: 'var(--cosmiq-elements-textSecondary)',
+          textTertiary: 'var(--cosmiq-elements-textTertiary)',
           code: {
-            background: 'var(--bolt-elements-code-background)',
-            text: 'var(--bolt-elements-code-text)',
+            background: 'var(--cosmiq-elements-code-background)',
+            text: 'var(--cosmiq-elements-code-text)',
           },
           button: {
             primary: {
-              background: 'var(--bolt-elements-button-primary-background)',
-              backgroundHover: 'var(--bolt-elements-button-primary-backgroundHover)',
-              text: 'var(--bolt-elements-button-primary-text)',
+              background: 'var(--cosmiq-elements-button-primary-background)',
+              backgroundHover: 'var(--cosmiq-elements-button-primary-backgroundHover)',
+              text: 'var(--cosmiq-elements-button-primary-text)',
             },
             secondary: {
-              background: 'var(--bolt-elements-button-secondary-background)',
-              backgroundHover: 'var(--bolt-elements-button-secondary-backgroundHover)',
-              text: 'var(--bolt-elements-button-secondary-text)',
+              background: 'var(--cosmiq-elements-button-secondary-background)',
+              backgroundHover: 'var(--cosmiq-elements-button-secondary-backgroundHover)',
+              text: 'var(--cosmiq-elements-button-secondary-text)',
             },
             danger: {
-              background: 'var(--bolt-elements-button-danger-background)',
-              backgroundHover: 'var(--bolt-elements-button-danger-backgroundHover)',
-              text: 'var(--bolt-elements-button-danger-text)',
+              background: 'var(--cosmiq-elements-button-danger-background)',
+              backgroundHover: 'var(--cosmiq-elements-button-danger-backgroundHover)',
+              text: 'var(--cosmiq-elements-button-danger-text)',
             },
           },
           item: {
-            contentDefault: 'var(--bolt-elements-item-contentDefault)',
-            contentActive: 'var(--bolt-elements-item-contentActive)',
-            contentAccent: 'var(--bolt-elements-item-contentAccent)',
-            contentDanger: 'var(--bolt-elements-item-contentDanger)',
-            backgroundDefault: 'var(--bolt-elements-item-backgroundDefault)',
-            backgroundActive: 'var(--bolt-elements-item-backgroundActive)',
-            backgroundAccent: 'var(--bolt-elements-item-backgroundAccent)',
-            backgroundDanger: 'var(--bolt-elements-item-backgroundDanger)',
+            contentDefault: 'var(--cosmiq-elements-item-contentDefault)',
+            contentActive: 'var(--cosmiq-elements-item-contentActive)',
+            contentAccent: 'var(--cosmiq-elements-item-contentAccent)',
+            contentDanger: 'var(--cosmiq-elements-item-contentDanger)',
+            backgroundDefault: 'var(--cosmiq-elements-item-backgroundDefault)',
+            backgroundActive: 'var(--cosmiq-elements-item-backgroundActive)',
+            backgroundAccent: 'var(--cosmiq-elements-item-backgroundAccent)',
+            backgroundDanger: 'var(--cosmiq-elements-item-backgroundDanger)',
           },
           actions: {
-            background: 'var(--bolt-elements-actions-background)',
+            background: 'var(--cosmiq-elements-actions-background)',
             code: {
-              background: 'var(--bolt-elements-actions-code-background)',
+              background: 'var(--cosmiq-elements-actions-code-background)',
             },
           },
           artifacts: {
-            background: 'var(--bolt-elements-artifacts-background)',
-            backgroundHover: 'var(--bolt-elements-artifacts-backgroundHover)',
-            borderColor: 'var(--bolt-elements-artifacts-borderColor)',
+            background: 'var(--cosmiq-elements-artifacts-background)',
+            backgroundHover: 'var(--cosmiq-elements-artifacts-backgroundHover)',
+            borderColor: 'var(--cosmiq-elements-artifacts-borderColor)',
             inlineCode: {
-              background: 'var(--bolt-elements-artifacts-inlineCode-background)',
-              text: 'var(--bolt-elements-artifacts-inlineCode-text)',
+              background: 'var(--cosmiq-elements-artifacts-inlineCode-background)',
+              text: 'var(--cosmiq-elements-artifacts-inlineCode-text)',
             },
           },
           messages: {
-            background: 'var(--bolt-elements-messages-background)',
-            linkColor: 'var(--bolt-elements-messages-linkColor)',
+            background: 'var(--cosmiq-elements-messages-background)',
+            linkColor: 'var(--cosmiq-elements-messages-linkColor)',
             code: {
-              background: 'var(--bolt-elements-messages-code-background)',
+              background: 'var(--cosmiq-elements-messages-code-background)',
             },
             inlineCode: {
-              background: 'var(--bolt-elements-messages-inlineCode-background)',
-              text: 'var(--bolt-elements-messages-inlineCode-text)',
+              background: 'var(--cosmiq-elements-messages-inlineCode-background)',
+              text: 'var(--cosmiq-elements-messages-inlineCode-text)',
             },
           },
           icon: {
-            success: 'var(--bolt-elements-icon-success)',
-            error: 'var(--bolt-elements-icon-error)',
-            primary: 'var(--bolt-elements-icon-primary)',
-            secondary: 'var(--bolt-elements-icon-secondary)',
-            tertiary: 'var(--bolt-elements-icon-tertiary)',
+            success: 'var(--cosmiq-elements-icon-success)',
+            error: 'var(--cosmiq-elements-icon-error)',
+            primary: 'var(--cosmiq-elements-icon-primary)',
+            secondary: 'var(--cosmiq-elements-icon-secondary)',
+            tertiary: 'var(--cosmiq-elements-icon-tertiary)',
           },
           preview: {
             addressBar: {
-              background: 'var(--bolt-elements-preview-addressBar-background)',
-              backgroundHover: 'var(--bolt-elements-preview-addressBar-backgroundHover)',
-              backgroundActive: 'var(--bolt-elements-preview-addressBar-backgroundActive)',
-              text: 'var(--bolt-elements-preview-addressBar-text)',
-              textActive: 'var(--bolt-elements-preview-addressBar-textActive)',
+              background: 'var(--cosmiq-elements-preview-addressBar-background)',
+              backgroundHover: 'var(--cosmiq-elements-preview-addressBar-backgroundHover)',
+              backgroundActive: 'var(--cosmiq-elements-preview-addressBar-backgroundActive)',
+              text: 'var(--cosmiq-elements-preview-addressBar-text)',
+              textActive: 'var(--cosmiq-elements-preview-addressBar-textActive)',
             },
           },
           terminals: {
-            background: 'var(--bolt-elements-terminals-background)',
-            buttonBackground: 'var(--bolt-elements-terminals-buttonBackground)',
+            background: 'var(--cosmiq-elements-terminals-background)',
+            buttonBackground: 'var(--cosmiq-elements-terminals-buttonBackground)',
           },
-          dividerColor: 'var(--bolt-elements-dividerColor)',
+          dividerColor: 'var(--cosmiq-elements-dividerColor)',
           loader: {
-            background: 'var(--bolt-elements-loader-background)',
-            progress: 'var(--bolt-elements-loader-progress)',
+            background: 'var(--cosmiq-elements-loader-background)',
+            progress: 'var(--cosmiq-elements-loader-progress)',
           },
           prompt: {
-            background: 'var(--bolt-elements-prompt-background)',
+            background: 'var(--cosmiq-elements-prompt-background)',
           },
           sidebar: {
-            dropdownShadow: 'var(--bolt-elements-sidebar-dropdownShadow)',
-            buttonBackgroundDefault: 'var(--bolt-elements-sidebar-buttonBackgroundDefault)',
-            buttonBackgroundHover: 'var(--bolt-elements-sidebar-buttonBackgroundHover)',
-            buttonText: 'var(--bolt-elements-sidebar-buttonText)',
+            dropdownShadow: 'var(--cosmiq-elements-sidebar-dropdownShadow)',
+            buttonBackgroundDefault: 'var(--cosmiq-elements-sidebar-buttonBackgroundDefault)',
+            buttonBackgroundHover: 'var(--cosmiq-elements-sidebar-buttonBackgroundHover)',
+            buttonText: 'var(--cosmiq-elements-sidebar-buttonText)',
           },
           cta: {
-            background: 'var(--bolt-elements-cta-background)',
-            text: 'var(--bolt-elements-cta-text)',
+            background: 'var(--cosmiq-elements-cta-background)',
+            text: 'var(--cosmiq-elements-cta-text)',
           },
         },
       },

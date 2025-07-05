@@ -257,18 +257,18 @@ export const ContractInteraction: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="bg-bolt-elements-background-depth-2 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-bolt-elements-textPrimary mb-4">🔗 Contract Interaction</h2>
+      <div className="bg-cosmiq-elements-background-depth-2 rounded-lg p-6">
+        <h2 className="text-2xl font-bold text-cosmiq-elements-textPrimary mb-4">🔗 Contract Interaction</h2>
 
         {isAuthenticated ? (
           <div className="space-y-6">
-            <div className="text-sm text-bolt-elements-textSecondary mb-4">
+            <div className="text-sm text-cosmiq-elements-textSecondary mb-4">
               <strong>Connected Account:</strong> {user?.addr}
             </div>
 
             {/* Read Operations */}
-            <div className="bg-bolt-elements-background-depth-3 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-3">📖 Read Contract Data</h3>
+            <div className="bg-cosmiq-elements-background-depth-3 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-3">📖 Read Contract Data</h3>
 
               <div className="space-y-3">
                 <div className="flex space-x-3">
@@ -290,20 +290,20 @@ export const ContractInteraction: React.FC = () => {
                 </div>
 
                 {contractData.greeting && (
-                  <div className="bg-bolt-elements-background-depth-4 rounded p-3">
-                    <p className="text-sm text-bolt-elements-textSecondary">Current Greeting:</p>
-                    <p className="text-bolt-elements-textPrimary font-medium">{contractData.greeting}</p>
+                  <div className="bg-cosmiq-elements-background-depth-4 rounded p-3">
+                    <p className="text-sm text-cosmiq-elements-textSecondary">Current Greeting:</p>
+                    <p className="text-cosmiq-elements-textPrimary font-medium">{contractData.greeting}</p>
                   </div>
                 )}
 
                 {contractData.contractInfo && (
-                  <div className="bg-bolt-elements-background-depth-4 rounded p-3">
-                    <p className="text-sm text-bolt-elements-textSecondary mb-2">Contract Info:</p>
+                  <div className="bg-cosmiq-elements-background-depth-4 rounded p-3">
+                    <p className="text-sm text-cosmiq-elements-textSecondary mb-2">Contract Info:</p>
                     <div className="space-y-1">
                       {Object.entries(contractData.contractInfo).map(([key, value]) => (
                         <div key={key} className="flex justify-between">
-                          <span className="text-bolt-elements-textSecondary text-sm">{key}:</span>
-                          <span className="text-bolt-elements-textPrimary text-sm">{value}</span>
+                          <span className="text-cosmiq-elements-textSecondary text-sm">{key}:</span>
+                          <span className="text-cosmiq-elements-textPrimary text-sm">{value}</span>
                         </div>
                       ))}
                     </div>
@@ -313,8 +313,8 @@ export const ContractInteraction: React.FC = () => {
             </div>
 
             {/* Write Operations */}
-            <div className="bg-bolt-elements-background-depth-3 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-3">✍️ Write Contract Data</h3>
+            <div className="bg-cosmiq-elements-background-depth-3 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-3">✍️ Write Contract Data</h3>
 
               <div className="space-y-4">
                 <div>
@@ -332,7 +332,7 @@ export const ContractInteraction: React.FC = () => {
                       '👋 Say Hello'
                     )}
                   </Button>
-                  <p className="text-xs text-bolt-elements-textSecondary mt-1">
+                  <p className="text-xs text-cosmiq-elements-textSecondary mt-1">
                     Calls the sayHello function and logs the message
                   </p>
                 </div>
@@ -344,7 +344,7 @@ export const ContractInteraction: React.FC = () => {
                       value={newGreeting}
                       onChange={(e) => setNewGreeting(e.target.value)}
                       placeholder="Enter new greeting..."
-                      className="flex-1 px-3 py-2 bg-bolt-elements-background-depth-4 border border-bolt-elements-borderColor rounded-lg text-bolt-elements-textPrimary placeholder-bolt-elements-textSecondary focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="flex-1 px-3 py-2 bg-cosmiq-elements-background-depth-4 border border-cosmiq-elements-borderColor rounded-lg text-cosmiq-elements-textPrimary placeholder-cosmiq-elements-textSecondary focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <Button
                       onClick={updateGreeting}
@@ -361,7 +361,7 @@ export const ContractInteraction: React.FC = () => {
                       )}
                     </Button>
                   </div>
-                  <p className="text-xs text-bolt-elements-textSecondary">
+                  <p className="text-xs text-cosmiq-elements-textSecondary">
                     Updates the greeting message in the contract
                   </p>
                 </div>
@@ -377,9 +377,9 @@ export const ContractInteraction: React.FC = () => {
             )}
 
             {/* Instructions */}
-            <div className="bg-bolt-elements-background-depth-3 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-3">📚 Instructions</h3>
-              <div className="space-y-2 text-sm text-bolt-elements-textSecondary">
+            <div className="bg-cosmiq-elements-background-depth-3 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-3">📚 Instructions</h3>
+              <div className="space-y-2 text-sm text-cosmiq-elements-textSecondary">
                 <p>1. First, deploy the HelloWorld contract using the deployment section above</p>
                 <p>2. Use "Get Greeting" to read the current greeting from the contract</p>
                 <p>3. Use "Say Hello" to call the contract function and see console logs</p>
@@ -389,7 +389,7 @@ export const ContractInteraction: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="text-bolt-elements-textSecondary">
+          <div className="text-cosmiq-elements-textSecondary">
             Please connect your Flow wallet to interact with the contract.
           </div>
         )}

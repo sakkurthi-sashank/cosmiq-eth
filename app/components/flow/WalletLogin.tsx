@@ -7,7 +7,7 @@ export const WalletLogin: React.FC = () => {
   const { login, isLoading, error } = useFlowAuth();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-bolt-elements-background-depth-1 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-cosmiq-elements-background-depth-1 px-4">
       <div className="max-w-md w-full space-y-8 text-center">
         {/* Flow Logo/Brand */}
         <div className="flex flex-col items-center space-y-4">
@@ -17,18 +17,18 @@ export const WalletLogin: React.FC = () => {
               <path d="M8 12l2 2 4-4" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-bolt-elements-textPrimary">Connect Flow Wallet</h1>
+          <h1 className="text-3xl font-bold text-cosmiq-elements-textPrimary">Connect Flow Wallet</h1>
         </div>
 
         {/* Description */}
         <div className="space-y-4">
-          <p className="text-lg text-bolt-elements-textSecondary">
+          <p className="text-lg text-cosmiq-elements-textSecondary">
             Connect your Flow wallet to access CosmiqETH and start building amazing applications.
           </p>
 
-          <div className="bg-bolt-elements-background-depth-2 rounded-lg p-4 text-left">
-            <h3 className="font-semibold text-bolt-elements-textPrimary mb-2">What you'll get:</h3>
-            <ul className="space-y-1 text-sm text-bolt-elements-textSecondary">
+          <div className="bg-cosmiq-elements-background-depth-2 rounded-lg p-4 text-left">
+            <h3 className="font-semibold text-cosmiq-elements-textPrimary mb-2">What you'll get:</h3>
+            <ul className="space-y-1 text-sm text-cosmiq-elements-textSecondary">
               <li>🚀 Access to AI-powered development tools</li>
               <li>💎 Secure Web3 authentication</li>
               <li>🔧 Build applications on Flow blockchain</li>
@@ -62,24 +62,24 @@ export const WalletLogin: React.FC = () => {
             )}
           </Button>
 
-          <p className="text-xs text-bolt-elements-textSecondary">
+          <p className="text-xs text-cosmiq-elements-textSecondary">
             By connecting, you agree to our Terms of Service and Privacy Policy. Your wallet will remain secure and
             private.
           </p>
         </div>
 
         {/* Supported Wallets */}
-        <div className="pt-8 border-t border-bolt-elements-borderColor">
-          <p className="text-sm text-bolt-elements-textSecondary mb-4">Supported Flow wallets:</p>
+        <div className="pt-8 border-t border-cosmiq-elements-borderColor">
+          <p className="text-sm text-cosmiq-elements-textSecondary mb-4">Supported Flow wallets:</p>
           <div className="flex justify-center space-x-4">
-            <div className="bg-bolt-elements-background-depth-2 rounded-lg p-3">
-              <span className="text-sm font-medium text-bolt-elements-textPrimary">Blocto</span>
+            <div className="bg-cosmiq-elements-background-depth-2 rounded-lg p-3">
+              <span className="text-sm font-medium text-cosmiq-elements-textPrimary">Blocto</span>
             </div>
-            <div className="bg-bolt-elements-background-depth-2 rounded-lg p-3">
-              <span className="text-sm font-medium text-bolt-elements-textPrimary">Lilico</span>
+            <div className="bg-cosmiq-elements-background-depth-2 rounded-lg p-3">
+              <span className="text-sm font-medium text-cosmiq-elements-textPrimary">Lilico</span>
             </div>
-            <div className="bg-bolt-elements-background-depth-2 rounded-lg p-3">
-              <span className="text-sm font-medium text-bolt-elements-textPrimary">Dapper</span>
+            <div className="bg-cosmiq-elements-background-depth-2 rounded-lg p-3">
+              <span className="text-sm font-medium text-cosmiq-elements-textPrimary">Dapper</span>
             </div>
           </div>
         </div>

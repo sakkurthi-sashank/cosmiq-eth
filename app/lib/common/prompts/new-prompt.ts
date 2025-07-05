@@ -304,10 +304,10 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
      - Analyze entire project context
      - Anticipate system impacts
 
-  3. Maximum one <boltArtifact> per response
+  3. Maximum one <cosmiqArtifact> per response
   4. Current working directory: ${cwd}
   5. ALWAYS use latest file modifications, NEVER fake placeholder code
-  6. Structure: <boltArtifact id="kebab-case" title="Title"><boltAction>...</boltAction></boltArtifact>
+  6. Structure: <cosmiqArtifact id="kebab-case" title="Title"><cosmiqAction>...</cosmiqAction></cosmiqArtifact>
 
   Action Types:
     - shell: Running commands (use --yes for npx/npm create, && for sequences, NEVER re-run dev servers)
@@ -430,8 +430,8 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
     <user_query>Create a simple to-do app</user_query>
     <assistant_response>I'll create a to-do app with Flow blockchain integration for decentralized task management.
 
-<boltArtifact id="blockchain-todo-app" title="Flow Blockchain Todo App">
-<boltAction type="file" filePath="package.json">
+<cosmiqArtifact id="blockchain-todo-app" title="Flow Blockchain Todo App">
+<cosmiqAction type="file" filePath="package.json">
 {
   "name": "blockchain-todo-app",
   "private": true,
@@ -460,9 +460,9 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
     "vite": "^4.4.0"
   }
 }
-</boltAction>
-<boltAction type="shell">npm install</boltAction>
-<boltAction type="file" filePath="src/lib/flow-config.js">
+</cosmiqAction>
+<cosmiqAction type="shell">npm install</cosmiqAction>
+<cosmiqAction type="file" filePath="src/lib/flow-config.js">
 import { config } from '@onflow/fcl';
 
 config({
@@ -475,8 +475,8 @@ config({
 });
 
 export { config as fcl };
-</boltAction>
-<boltAction type="file" filePath="contracts/TodoContract.cdc">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="contracts/TodoContract.cdc">
 // TodoContract.cdc - Decentralized Todo Management
 access(all) contract TodoContract {
 
@@ -564,8 +564,8 @@ access(all) contract TodoContract {
         return self.todos.values
     }
 }
-</boltAction>
-<boltAction type="file" filePath="src/contexts/FlowAuthContext.jsx">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="src/contexts/FlowAuthContext.jsx">
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as fcl from '@onflow/fcl';
 import '../lib/flow-config.js';
@@ -615,8 +615,8 @@ export const FlowAuthProvider = ({ children }) => {
     </FlowAuthContext.Provider>
   );
 };
-</boltAction>
-<boltAction type="file" filePath="src/components/flow/AuthGuard.jsx">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="src/components/flow/AuthGuard.jsx">
 import { useFlowAuth } from '../../contexts/FlowAuthContext';
 import { WalletLogin } from './WalletLogin';
 
@@ -637,8 +637,8 @@ export const AuthGuard = ({ children }) => {
 
   return children;
 };
-</boltAction>
-<boltAction type="file" filePath="src/components/flow/WalletLogin.jsx">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="src/components/flow/WalletLogin.jsx">
 import { useFlowAuth } from '../../contexts/FlowAuthContext';
 
 export const WalletLogin = () => {
@@ -663,8 +663,8 @@ export const WalletLogin = () => {
     </div>
   );
 };
-</boltAction>
-<boltAction type="file" filePath="src/components/flow/ContractDeployment.jsx">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="src/components/flow/ContractDeployment.jsx">
 import { useState } from 'react';
 import { useFlowAuth } from '../../contexts/FlowAuthContext';
 import * as fcl from '@onflow/fcl';
@@ -782,8 +782,8 @@ export const ContractDeployment = ({ onDeploymentComplete }) => {
     </div>
   );
 };
-</boltAction>
-<boltAction type="file" filePath="src/components/TodoApp.jsx">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="src/components/TodoApp.jsx">
 import { useState, useEffect } from 'react';
 import { useFlowAuth } from '../contexts/FlowAuthContext';
 import { ContractDeployment } from './flow/ContractDeployment';
@@ -943,8 +943,8 @@ export const TodoApp = () => {
     </div>
   );
 };
-</boltAction>
-<boltAction type="file" filePath="src/App.jsx">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="src/App.jsx">
 import { FlowAuthProvider } from './contexts/FlowAuthContext';
 import { AuthGuard } from './components/flow/AuthGuard';
 import { TodoApp } from './components/TodoApp';
@@ -960,8 +960,8 @@ function App() {
 }
 
 export default App;
-</boltAction>
-<boltAction type="file" filePath="src/main.jsx">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="src/main.jsx">
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
@@ -972,8 +972,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 );
-</boltAction>
-<boltAction type="file" filePath="src/index.css">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="src/index.css">
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -991,8 +991,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-</boltAction>
-<boltAction type="file" filePath="index.html">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="index.html">
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -1007,8 +1007,8 @@ code {
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-</boltAction>
-<boltAction type="file" filePath="vite.config.js">
+</cosmiqAction>
+<cosmiqAction type="file" filePath="vite.config.js">
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -1019,9 +1019,9 @@ export default defineConfig({
     open: true
   }
 });
-</boltAction>
-<boltAction type="start">npm run dev</boltAction>
-</boltArtifact>
+</cosmiqAction>
+<cosmiqAction type="start">npm run dev</cosmiqAction>
+</cosmiqArtifact>
 
 Your blockchain todo app is ready! This application includes:
 

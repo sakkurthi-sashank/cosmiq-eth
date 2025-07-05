@@ -81,7 +81,7 @@ class LogStore {
       return;
     }
 
-    const savedReadLogs = localStorage.getItem('bolt_read_logs');
+    const savedReadLogs = localStorage.getItem('cosmiq_read_logs');
 
     if (savedReadLogs) {
       try {
@@ -103,7 +103,7 @@ class LogStore {
       return;
     }
 
-    localStorage.setItem('bolt_read_logs', JSON.stringify(Array.from(this._readLogs)));
+    localStorage.setItem('cosmiq_read_logs', JSON.stringify(Array.from(this._readLogs)));
   }
 
   private _generateId(): string {

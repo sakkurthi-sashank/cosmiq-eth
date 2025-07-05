@@ -180,7 +180,7 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
 ${cwd}
 </project_root>
 
-<boltArtifact id="project-import" title="Project Files">
+<cosmiqArtifact id="project-import" title="Project Files">
 You are currently in a project that has been imported into the conversation. The project structure and files have been automatically imported and are available in the conversation context.
 
 Key points about the imported project:
@@ -197,7 +197,7 @@ You can:
 - Understand the context and purpose of the project
 
 The project is ready for analysis and modification. You can proceed with any tasks related to understanding, debugging, or enhancing the project.
-</boltArtifact>
+</cosmiqArtifact>
 
 ## Development Guidelines
 

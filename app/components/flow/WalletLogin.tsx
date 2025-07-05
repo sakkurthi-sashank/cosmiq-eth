@@ -44,7 +44,7 @@ export const WalletLogin: React.FC = () => {
           <Button
             onClick={login}
             disabled={isLoading}
-            className="w-full bg-green-500 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+            className="w-full bg-green-500 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:bg-green-500 disabled:opacity-50"
           >
             {isLoading ? (
               <div className="flex items-center justify-center space-x-2">

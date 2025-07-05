@@ -1,12 +1,8 @@
 import { Graph, Ipfs, type Op, SystemIds, getWalletClient } from '@graphprotocol/grc-20';
-import dotenv from 'dotenv';
-
-
-
 
 // Get environment variables
-const addressPrivateKey = process.env.PRIVATE_KEY as `0x${string}`;
-const addressEnv = process.env.ADDRESS as `0x${string}`;
+const addressPrivateKey = import.meta.env.VITE_PRIVATE_KEY as `0x${string}`;
+const addressEnv = import.meta.env.VITE_ADDRESS as `0x${string}`;
 
 if (!addressPrivateKey) {
   throw new Error('PRIVATE_KEY environment variable is required');

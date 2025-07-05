@@ -61,7 +61,7 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
 
   const isSmallViewport = useViewport(1024);
 
-  // Simple view state - only code and preview
+  // View state - code and preview
   const [selectedView, setSelectedView] = useState<'code' | 'preview'>('code');
 
   // Auto-switch to preview when it becomes available
@@ -118,7 +118,7 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
 
           <KnowledgeGraphStatus chatId={currentChatId} className="mx-2 mt-2" />
 
-          <div className="flex items-center px-3 py-2 border-b border-cosmiq-elements-borderColor">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-cosmiq-elements-borderColor">
             <div className="flex items-center gap-2">
               <button
                 className={classNames(
@@ -145,9 +145,21 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
                 </button>
               )}
             </div>
+
+            {/* Intelligence Platform Button */}
+            <button
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-200 shadow-sm hover:shadow-md"
+              onClick={() => window.open('/intelligence', '_blank')}
+              title="Open Intelligence Platform in new tab"
+            >
+              <span className="text-base">🧠</span>
+              Intelligence
+              <span className="text-xs opacity-75">↗</span>
+            </button>
+
             <IconButton
               icon="i-ph:x-circle"
-              className="ml-auto -mr-1"
+              className="-mr-1"
               size="xl"
               onClick={() => {
                 workbenchStore.showWorkbench.set(false);

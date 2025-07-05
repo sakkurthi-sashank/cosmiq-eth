@@ -7,6 +7,8 @@ import { Button } from '../ui/Button';
 import { LoadingDots } from '../ui/LoadingDots';
 import { fcl } from '../../lib/flow-config';
 import { chatStore } from '../../lib/stores/chat';
+import { knowledgeGraphService } from '../../lib/services/knowledgeGraphService';
+import { getCurrentChatId } from '../../utils/fileLocks';
 
 interface DeployContractButtonProps {
   className?: string;
@@ -16,7 +18,7 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
   const { user, isAuthenticated } = useFlowAuth();
   const files = useStore(workbenchStore.files);
   // Get current chat ID for localStorage key
-  const chatId = 'current_chat'; // You can replace this with actual chat ID from your store
+  const chatId = getCurrentChatId();
   const [isDeploying, setIsDeploying] = useState(false);
   const [deploymentStatus, setDeploymentStatus] = useState<'idle' | 'deploying' | 'success' | 'error'>('idle');
   const [deploymentMessage, setDeploymentMessage] = useState<string>('');
@@ -94,9 +96,20 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
 
   // Effect to check deployment status from localStorage when user connects or chat changes
   useEffect(() => {
-    if (!user?.addr || !isAuthenticated || !chatId) return;
+    if (!user?.addr || !isAuthenticated || !chatId) {
+      console.log('🔍 DeployContractButton: Missing requirements', {
+        userAddr: user?.addr,
+        isAuthenticated,
+        chatId,
+      });
+      return;
+    }
 
-    console.log('🔍 Checking deployment status for chat:', chatId, 'user:', user.addr);
+    console.log('🔍 DeployContractButton: Checking deployment status', {
+      chatId,
+      userAddr: user.addr,
+      storageKey: `contract_deployed_${chatId}_${user.addr}`,
+    });
 
     // Check if contract is already deployed for this chat and user
     const isDeployed = getDeploymentStatus(chatId, user.addr);
@@ -216,6 +229,49 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
       // This is handled by the parent CosmIQ app according to the three-phase workflow
       console.log('🔄 Phase 3: Address propagation initiated');
       console.log('💉 Ready to inject address into contract interaction components');
+
+      // 🌐 KNOWLEDGE GRAPH INTEGRATION - Publish to The Graph
+      try {
+        setDeploymentMessage(`${contractName} deployed! Publishing to Knowledge Graph...`);
+        console.log('🌐 Publishing dapp metadata to The Graph Knowledge Graph...');
+
+        // Extract metadata from the current workspace
+        const dappMetadata = knowledgeGraphService.extractDappMetadata(
+          files,
+          'Smart contract deployment', // We don't have the original prompt here, could be enhanced
+          user.addr,
+          true, // Contract is deployed
+          contractAddress,
+        );
+
+        // Publish to Knowledge Graph
+        const publishedDapp = await knowledgeGraphService.publishDappMetadata(dappMetadata);
+
+        console.log('✅ Dapp metadata published to Knowledge Graph!');
+        console.log('📊 Knowledge Graph ID:', publishedDapp.knowledgeGraphId);
+        console.log('📄 IPFS CID:', publishedDapp.ipfsCid);
+
+        setDeploymentMessage(`${contractName} deployed & published to Knowledge Graph! 🌐`);
+
+        // Store Knowledge Graph information for future reference
+        const kgStorageKey = `kg_${chatId}_${user.addr}`;
+        const kgStorageData = {
+          knowledgeGraphId: publishedDapp.knowledgeGraphId,
+          ipfsCid: publishedDapp.ipfsCid,
+          publishedAt: new Date().toISOString(),
+        };
+
+        localStorage.setItem(kgStorageKey, JSON.stringify(kgStorageData));
+
+        console.log('💾 Knowledge Graph data stored:', {
+          storageKey: kgStorageKey,
+          data: kgStorageData,
+        });
+      } catch (kgError) {
+        console.warn('⚠️ Failed to publish to Knowledge Graph:', kgError);
+        // Don't fail the deployment if Knowledge Graph publishing fails
+        setDeploymentMessage(`${contractName} deployed! (Knowledge Graph publishing failed)`);
+      }
     } catch (error) {
       console.error('❌ Deployment failed:', error);
       setDeploymentStatus('error');

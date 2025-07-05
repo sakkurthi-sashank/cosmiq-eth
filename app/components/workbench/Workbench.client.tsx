@@ -14,9 +14,12 @@ import { cubicEasingFn } from '~/utils/easings';
 import { EditorPanel } from './EditorPanel';
 import { Preview } from './Preview';
 import { DeployContractButton } from './DeployContractButton';
+import { KnowledgeGraphStatus } from '../knowledgeGraph/KnowledgeGraphStatus';
 import useViewport from '~/lib/hooks';
 import { usePreviewStore } from '~/lib/stores/previews';
 import { chatStore } from '~/lib/stores/chat';
+import { getCurrentChatId } from '~/utils/fileLocks';
+import '~/utils/knowledgeGraphDebug';
 
 interface WorkspaceProps {
   chatStarted?: boolean;
@@ -52,6 +55,9 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
   const unsavedFiles = useStore(workbenchStore.unsavedFiles);
   const files = useStore(workbenchStore.files);
   const { showChat } = useStore(chatStore);
+
+  // Get current chat ID for Knowledge Graph integration
+  const currentChatId = getCurrentChatId();
 
   const isSmallViewport = useViewport(1024);
 
@@ -109,6 +115,8 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
         <div className="h-full border-l border-cosmiq-elements-borderColor bg-cosmiq-elements-background-depth-2 flex flex-col">
           {/* Deploy Contract Button - Prominently displayed above application panel */}
           <DeployContractButton />
+
+          <KnowledgeGraphStatus chatId={currentChatId} className="mx-2 mt-2" />
 
           <div className="flex items-center px-3 py-2 border-b border-cosmiq-elements-borderColor">
             <div className="flex items-center gap-2">

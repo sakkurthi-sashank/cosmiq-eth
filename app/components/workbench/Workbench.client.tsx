@@ -147,15 +147,17 @@ export const Workbench = memo(({ chatStarted, isStreaming, actionRunner, setSele
             </div>
 
             {/* Intelligence Platform Button */}
-            <button
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-200 shadow-sm hover:shadow-md"
-              onClick={() => window.open('/intelligence', '_blank')}
-              title="Open Intelligence Platform in new tab"
-            >
-              <span className="text-base">🧠</span>
-              Intelligence
-              <span className="text-xs opacity-75">↗</span>
-            </button>
+            <div className="flex justify-end w-full gap-2">
+              <button
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium bg-gradient-to-r from-green-500 to-green-500 text-white hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                onClick={() => window.open('/intelligence', '_blank')}
+                title="Open Intelligence Platform in new tab"
+              >
+                <span className="text-base">🧠</span>
+                Intelligence
+                <span className="text-xs opacity-75">↗</span>
+              </button>
+            </div>
 
             <IconButton
               icon="i-ph:x-circle"

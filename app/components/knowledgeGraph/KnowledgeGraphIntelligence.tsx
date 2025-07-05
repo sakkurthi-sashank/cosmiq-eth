@@ -27,7 +27,7 @@ export const KnowledgeGraphIntelligence: React.FC<KnowledgeGraphIntelligenceProp
             Knowledge Graph Intelligence
           </Badge>
         </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-green-600 bg-clip-text text-transparent">
           Cosmiq Intelligence Platform
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">

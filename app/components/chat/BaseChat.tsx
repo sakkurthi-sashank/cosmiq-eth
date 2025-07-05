@@ -15,7 +15,6 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 import styles from './BaseChat.module.scss';
 import type { ProviderInfo } from '~/types/model';
 import type { ActionAlert } from '~/types/actions';
-import ChatAlert from './ChatAlert';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 import ProgressCompilation from './ProgressCompilation';
 import type { ProgressAnnotation } from '~/types/context';
@@ -234,18 +233,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                   <ScrollToBottom />
                 </StickToBottom.Content>
                 <div className="sticky bottom-2 flex flex-col gap-2 w-full max-w-chat mx-auto z-prompt mb-6">
-                  <div className="flex flex-col gap-2">
-                    {actionAlert && (
-                      <ChatAlert
-                        alert={actionAlert}
-                        clearAlert={() => clearAlert?.()}
-                        postMessage={(message) => {
-                          sendMessage?.({} as any, message);
-                          clearAlert?.();
-                        }}
-                      />
-                    )}
-                  </div>
                   {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
                   <ChatBox
                     isModelSettingsCollapsed={isModelSettingsCollapsed}
@@ -303,18 +290,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
 
                   {/* Chat Input Section */}
                   <div className="w-full max-w-4xl space-y-6">
-                    <div className="flex flex-col gap-2">
-                      {actionAlert && (
-                        <ChatAlert
-                          alert={actionAlert}
-                          clearAlert={() => clearAlert?.()}
-                          postMessage={(message) => {
-                            sendMessage?.({} as any, message);
-                            clearAlert?.();
-                          }}
-                        />
-                      )}
-                    </div>
                     {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
                     <ChatBox
                       isModelSettingsCollapsed={isModelSettingsCollapsed}

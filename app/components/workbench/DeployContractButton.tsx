@@ -284,13 +284,13 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
   const getStatusColor = () => {
     switch (deploymentStatus) {
       case 'deploying':
-        return 'from-blue-500 to-purple-600';
+        return 'from-green-500 to-green-600';
       case 'success':
-        return 'from-green-500 to-emerald-600';
+        return 'from-green-500 to-green-600';
       case 'error':
-        return 'from-red-500 to-pink-600';
+        return 'from-red-500 to-red-600';
       default:
-        return 'from-blue-500 to-purple-600';
+        return 'from-green-500 to-green-600';
     }
   };
 

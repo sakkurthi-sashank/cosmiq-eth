@@ -56,7 +56,7 @@ const SliderButton = memo(({ selected, children, setSelected }: SliderButtonProp
       className={classNames(
         'bg-transparent text-sm px-2.5 py-0.5 rounded-full relative',
         selected
-          ? 'text-cosmiq-elements-item-contentAccent'
+          ? 'text-green-500'
           : 'text-cosmiq-elements-item-contentDefault hover:text-cosmiq-elements-item-contentActive',
       )}
     >

@@ -233,7 +233,7 @@ const ActionList = memo(({ actions }: ActionListProps) => {
                   <div>
                     Create{' '}
                     <code
-                      className="bg-cosmiq-elements-artifacts-inlineCode-background text-cosmiq-elements-artifacts-inlineCode-text px-1.5 py-1 rounded-md text-cosmiq-elements-item-contentAccent hover:underline cursor-pointer"
+                      className="bg-cosmiq-elements-artifacts-inlineCode-background text-cosmiq-elements-artifacts-inlineCode-text px-1.5 py-1 rounded-md hover:underline cursor-pointer"
                       onClick={() => openArtifactInWorkbench(action.filePath)}
                     >
                       {action.filePath}

@@ -1,4 +1,11 @@
-import type { ActionType, CosmiqAction, CosmiqActionData, FileAction, ShellAction, SupabaseAction } from '~/types/actions';
+import type {
+  ActionType,
+  CosmiqAction,
+  CosmiqActionData,
+  FileAction,
+  ShellAction,
+  SupabaseAction,
+} from '~/types/actions';
 import type { CosmiqArtifactData } from '~/types/artifact';
 import { unreachable } from '~/utils/unreachable';
 
@@ -6,8 +13,8 @@ const ARTIFACT_TAG_OPEN = '<cosmiqArtifact';
 const ARTIFACT_TAG_CLOSE = '</cosmiqArtifact>';
 const ARTIFACT_ACTION_TAG_OPEN = '<cosmiqAction';
 const ARTIFACT_ACTION_TAG_CLOSE = '</cosmiqAction>';
-const BOLT_QUICK_ACTIONS_OPEN = '<cosmiq-quick-actions>';
-const BOLT_QUICK_ACTIONS_CLOSE = '</cosmiq-quick-actions>';
+const COSMIQ_QUICK_ACTIONS_OPEN = '<cosmiq-quick-actions>';
+const COSMIQ_QUICK_ACTIONS_CLOSE = '</cosmiq-quick-actions>';
 
 export interface ArtifactCallbackData extends CosmiqArtifactData {
   messageId: string;
@@ -92,13 +99,13 @@ export class StreamingMessageParser {
     let earlyBreak = false;
 
     while (i < input.length) {
-      if (input.startsWith(BOLT_QUICK_ACTIONS_OPEN, i)) {
+      if (input.startsWith(COSMIQ_QUICK_ACTIONS_OPEN, i)) {
         console.log('input:', input.slice(i));
 
-        const actionsBlockEnd = input.indexOf(BOLT_QUICK_ACTIONS_CLOSE, i);
+        const actionsBlockEnd = input.indexOf(COSMIQ_QUICK_ACTIONS_CLOSE, i);
 
         if (actionsBlockEnd !== -1) {
-          const actionsBlockContent = input.slice(i + BOLT_QUICK_ACTIONS_OPEN.length, actionsBlockEnd);
+          const actionsBlockContent = input.slice(i + COSMIQ_QUICK_ACTIONS_OPEN.length, actionsBlockEnd);
 
           // Find all <cosmiq-quick-action ...>label</cosmiq-quick-action> inside
           const quickActionRegex = /<cosmiq-quick-action([^>]*)>([\s\S]*?)<\/cosmiq-quick-action>/g;
@@ -120,7 +127,7 @@ export class StreamingMessageParser {
             );
           }
           output += createQuickActionGroup(buttons);
-          i = actionsBlockEnd + BOLT_QUICK_ACTIONS_CLOSE.length;
+          i = actionsBlockEnd + COSMIQ_QUICK_ACTIONS_CLOSE.length;
           continue;
         }
       }

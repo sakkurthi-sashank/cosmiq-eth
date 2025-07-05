@@ -18,23 +18,25 @@ const FLOW_INTEGRATION_INSTRUCTIONS = `
 
 ### CRITICAL: Every application MUST follow the three-phase Web3 deployment workflow
 
-🔄 **PHASE 1: SMART CONTRACT GENERATION**
-- Generate secure, production-ready Cadence smart contracts
-- DO NOT embed deployment logic within the generated frontend
+🔄 **PHASE 1: SINGLE COMPREHENSIVE SMART CONTRACT GENERATION**
+- Generate ONE comprehensive Cadence smart contract containing ALL application functions
+- Include all business logic: create, read, update, delete, mint, buy, sell, transfer operations
+- DO NOT create multiple contracts - consolidate everything into one contract
 - Smart contracts are generated separately from the application
-- Contracts should be modular and deployment-agnostic
+- Contract should be modular and deployment-agnostic
 
-🚀 **PHASE 2: DEPLOYMENT EXECUTION**
-- Deployment is handled by the parent CosmIQ app, NOT the mini-app
+🚀 **PHASE 2: PARENT APP DEPLOYMENT EXECUTION**
+- Deployment is handled EXCLUSIVELY by the parent CosmIQ app, NOT the mini-app
 - User clicks "Deploy Contract" button above the application panel
 - Deployment uses user's connected Flow wallet credentials
 - Real-time deployment status tracking via parent app
+- Mini-app NEVER attempts to deploy contracts itself
 
-🔗 **PHASE 3: ADDRESS PROPAGATION & INTEGRATION**
-- Deployed contract address is automatically captured
-- Address is injected into frontend components where needed
-- All contract interactions use the deployed address
-- Seamless integration without manual code modification
+🔗 **PHASE 3: ADDRESS INJECTION & INTEGRATION**
+- Deployed contract address is automatically captured by parent app
+- Address is injected into ALL frontend components that need blockchain functionality
+- All contract interactions (mint, buy, sell, transfer, etc.) use the injected deployed address
+- Complete seamless integration without manual code modification
 
 ### FLOW SETUP REQUIREMENTS:
 
@@ -49,7 +51,46 @@ CRITICAL: All transactions must use proper authorization entitlements:
 - **General Transactions**: \`auth(Storage) &Account\` for most user transactions
 - **Resource Operations**: Proper entitlements based on resource requirements
 
-#### 3. Flow Configuration
+#### 3. Flow Project Structure (Based on Flow Best Practices)
+
+\`\`\`
+project-root/
+├── cadence/                    # All Cadence blockchain code
+│   ├── contracts/             # Smart contract (.cdc files)
+│   │   └── AppContract.cdc    # Single comprehensive contract
+│   ├── scripts/               # Read-only blockchain queries
+│   │   ├── get_items.cdc
+│   │   ├── get_balance.cdc
+│   │   └── get_metadata.cdc
+│   └── transactions/          # State-changing blockchain operations
+│       ├── setup_account.cdc
+│       ├── mint_item.cdc
+│       ├── buy_item.cdc
+│       ├── sell_item.cdc
+│       └── transfer_item.cdc
+├── src/
+│   ├── components/
+│   │   ├── flow/              # Flow-specific components
+│   │   │   ├── FlowAuthContext.tsx
+│   │   │   ├── AuthGuard.tsx
+│   │   │   ├── WalletLogin.tsx
+│   │   │   └── ContractWarning.tsx
+│   │   └── ui/                # General UI components
+│   ├── lib/
+│   │   ├── flow-config.ts     # FCL configuration
+│   │   ├── flow-types.ts      # Flow-related TypeScript types
+│   │   └── contract-service.ts # Contract interaction service
+│   ├── hooks/
+│   │   ├── useFlowAuth.ts     # Flow authentication hook
+│   │   ├── useContract.ts     # Contract interaction hook
+│   │   └── useContractAddress.ts # Contract address management
+│   └── services/
+│       └── blockchain.ts      # Blockchain service layer
+├── flow.json                  # Flow configuration file
+└── package.json
+\`\`\`
+
+#### 4. Flow Configuration
 Create flow-config.js/ts with:
 \`\`\`javascript
 import { config } from '@onflow/fcl';
@@ -91,51 +132,176 @@ Based on the application context, create a relevant Cadence smart contract:
 - **Real Estate**: Property listings, ownership tracking
 - **Supply Chain**: Product tracking, authenticity verification
 
-### SMART CONTRACT TEMPLATE STRUCTURE:
+### COMPREHENSIVE SMART CONTRACT TEMPLATE:
 
 \`\`\`cadence
-// Contract should be relevant to the application
+// Single comprehensive contract containing ALL application functions
 access(all) contract [AppName]Contract {
 
-    // Events for logging
+    // Events for ALL operations
     access(all) event ContractDeployed(message: String)
-    access(all) event [RelevantEvent](data: String)
+    access(all) event ItemCreated(id: UInt64, data: String)
+    access(all) event ItemMinted(id: UInt64, owner: Address)
+    access(all) event ItemPurchased(id: UInt64, buyer: Address, seller: Address, price: UFix64)
+    access(all) event ItemSold(id: UInt64, seller: Address, buyer: Address, price: UFix64)
+    access(all) event ItemTransferred(id: UInt64, from: Address, to: Address)
+    access(all) event StateUpdated(key: String, value: String)
 
-    // State variables relevant to the app
-    access(all) var [relevantState]: String
+    // State variables for ALL functionality
+    access(all) var totalItems: UInt64
+    access(all) var totalSales: UFix64
+    access(all) var itemsCreated: {UInt64: ItemData}
+    access(all) var itemPrices: {UInt64: UFix64}
+    access(all) var itemOwners: {UInt64: Address}
+
+    // Data structures
+    access(all) struct ItemData {
+        access(all) let id: UInt64
+        access(all) let title: String
+        access(all) let description: String
+        access(all) let metadata: {String: String}
+        access(all) let createdAt: UFix64
+
+        init(id: UInt64, title: String, description: String, metadata: {String: String}) {
+            self.id = id
+            self.title = title
+            self.description = description
+            self.metadata = metadata
+            self.createdAt = getCurrentBlock().timestamp
+        }
+    }
 
     // Initialization
     init() {
-        self.[relevantState] = "Initial value"
+        self.totalItems = 0
+        self.totalSales = 0.0
+        self.itemsCreated = {}
+        self.itemPrices = {}
+        self.itemOwners = {}
         emit ContractDeployed(message: "Contract deployed successfully")
         log("✅ [AppName]Contract deployed successfully")
     }
 
-    // App-specific functions
-    access(all) fun [relevantFunction](): String {
-        log("🔄 [relevantFunction] called")
-        emit [RelevantEvent](data: "Function executed")
-        return "Success"
+    // CREATE FUNCTIONS
+    access(all) fun createItem(title: String, description: String, metadata: {String: String}): UInt64 {
+        let itemId = self.totalItems
+        let item = ItemData(id: itemId, title: title, description: description, metadata: metadata)
+        self.itemsCreated[itemId] = item
+        self.totalItems = self.totalItems + 1
+        emit ItemCreated(id: itemId, data: title)
+        log("📝 Item created with ID: ".concat(itemId.toString()))
+        return itemId
     }
 
-    // Admin functions if needed
-    access(all) fun updateState(newValue: String) {
-        self.[relevantState] = newValue
-        log("📝 State updated to: ".concat(newValue))
+    // MINT FUNCTIONS
+    access(all) fun mintItem(itemId: UInt64, owner: Address) {
+        pre {
+            self.itemsCreated[itemId] != nil: "Item does not exist"
+            self.itemOwners[itemId] == nil: "Item already minted"
+        }
+        self.itemOwners[itemId] = owner
+        emit ItemMinted(id: itemId, owner: owner)
+        log("🎨 Item minted to: ".concat(owner.toString()))
+    }
+
+    // BUY FUNCTIONS
+    access(all) fun buyItem(itemId: UInt64, buyer: Address, price: UFix64) {
+        pre {
+            self.itemsCreated[itemId] != nil: "Item does not exist"
+            self.itemOwners[itemId] != nil: "Item not minted"
+            self.itemPrices[itemId] != nil: "Item not for sale"
+            price >= self.itemPrices[itemId]!: "Insufficient payment"
+        }
+        let seller = self.itemOwners[itemId]!
+        self.itemOwners[itemId] = buyer
+        self.itemPrices.remove(key: itemId)
+        self.totalSales = self.totalSales + price
+        emit ItemPurchased(id: itemId, buyer: buyer, seller: seller, price: price)
+        log("💰 Item purchased by: ".concat(buyer.toString()))
+    }
+
+    // SELL FUNCTIONS
+    access(all) fun sellItem(itemId: UInt64, seller: Address, price: UFix64) {
+        pre {
+            self.itemsCreated[itemId] != nil: "Item does not exist"
+            self.itemOwners[itemId] == seller: "Only owner can sell"
+        }
+        self.itemPrices[itemId] = price
+        emit ItemSold(id: itemId, seller: seller, buyer: seller, price: price)
+        log("🏷️ Item listed for sale at: ".concat(price.toString()))
+    }
+
+    // TRANSFER FUNCTIONS
+    access(all) fun transferItem(itemId: UInt64, from: Address, to: Address) {
+        pre {
+            self.itemsCreated[itemId] != nil: "Item does not exist"
+            self.itemOwners[itemId] == from: "Only owner can transfer"
+        }
+        self.itemOwners[itemId] = to
+        self.itemPrices.remove(key: itemId) // Remove from sale if being transferred
+        emit ItemTransferred(id: itemId, from: from, to: to)
+        log("🔄 Item transferred from: ".concat(from.toString()).concat(" to: ").concat(to.toString()))
+    }
+
+    // QUERY FUNCTIONS
+    access(all) fun getItem(itemId: UInt64): ItemData? {
+        return self.itemsCreated[itemId]
+    }
+
+    access(all) fun getItemOwner(itemId: UInt64): Address? {
+        return self.itemOwners[itemId]
+    }
+
+    access(all) fun getItemPrice(itemId: UInt64): UFix64? {
+        return self.itemPrices[itemId]
+    }
+
+    access(all) fun getTotalItems(): UInt64 {
+        return self.totalItems
+    }
+
+    access(all) fun getTotalSales(): UFix64 {
+        return self.totalSales
+    }
+
+    access(all) fun getAllItems(): [ItemData] {
+        let items: [ItemData] = []
+        for id in self.itemsCreated.keys {
+            items.append(self.itemsCreated[id]!)
+        }
+        return items
+    }
+
+    // UPDATE FUNCTIONS
+    access(all) fun updateItemMetadata(itemId: UInt64, metadata: {String: String}) {
+        pre {
+            self.itemsCreated[itemId] != nil: "Item does not exist"
+        }
+        let item = self.itemsCreated[itemId]!
+        let updatedItem = ItemData(id: item.id, title: item.title, description: item.description, metadata: metadata)
+        self.itemsCreated[itemId] = updatedItem
+        emit StateUpdated(key: "metadata", value: itemId.toString())
+        log("📝 Item metadata updated for ID: ".concat(itemId.toString()))
     }
 
     // Resource-based functionality for advanced use cases
-    access(all) resource [ResourceName] {
+    access(all) resource ItemNFT {
         access(all) let id: UInt64
+        access(all) let data: ItemData
 
-        init() {
-            self.id = self.uuid
+        init(id: UInt64, data: ItemData) {
+            self.id = id
+            self.data = data
         }
     }
 
-    // Function to create resources
-    access(all) fun create[ResourceName](): @[ResourceName] {
-        return <- create [ResourceName]()
+    // Function to create NFT resources
+    access(all) fun createItemNFT(itemId: UInt64): @ItemNFT {
+        pre {
+            self.itemsCreated[itemId] != nil: "Item does not exist"
+        }
+        let item = self.itemsCreated[itemId]!
+        return <- create ItemNFT(id: itemId, data: item)
     }
 }
 \`\`\`
@@ -164,7 +330,10 @@ access(all) contract [AppName]Contract {
 1. **WalletLogin.tsx**: Flow wallet authentication interface
 2. **FlowAuthContext.tsx**: Authentication state management
 3. **AuthGuard.tsx**: Protected route wrapper
-4. **Contract Interface**: Component for contract interaction (address injected post-deployment)
+4. **ContractWarning.tsx**: Warning screen when parent contract is not deployed
+5. **Contract Interface Components**: All components that need blockchain functionality (address injected post-deployment)
+6. **useContractAddress.ts**: Hook to manage contract address injection
+7. **Contract Service Layer**: Centralized blockchain interaction service
 
 ### INTEGRATION PATTERN:
 
@@ -219,35 +388,86 @@ transaction() {
 ### CONTRACT INTERACTION PATTERN:
 
 \`\`\`javascript
-// Contract interactions using injected address
-const ContractInteraction = ({ contractAddress }) => {
-  const executeContract = async () => {
-    if (!contractAddress) {
-      console.error('Contract address not available - deployment required');
-      return;
-    }
+// Contract Warning Component Pattern
+const ContractWarning = ({ contractAddress }) => {
+  if (contractAddress) {
+    return null; // Hide warning when contract is deployed
+  }
 
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md text-center">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Contract Not Deployed</h2>
+        <p className="text-gray-600 mb-6">
+          This mini-app requires the parent contract to be deployed first.
+          Please use the "Deploy Contract" button above to deploy the smart contract.
+        </p>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <p className="text-sm text-yellow-800">
+            💡 Once deployed, this warning will disappear and the app will be fully functional.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Contract Address Hook Pattern
+const useContractAddress = () => {
+  const [contractAddress, setContractAddress] = useState(null);
+
+  useEffect(() => {
+    // Listen for contract address injection from parent app
+    const handleAddressInjection = (event) => {
+      if (event.data.type === 'CONTRACT_ADDRESS_INJECTION') {
+        setContractAddress(event.data.address);
+      }
+    };
+
+    window.addEventListener('message', handleAddressInjection);
+    return () => window.removeEventListener('message', handleAddressInjection);
+  }, []);
+
+  return contractAddress;
+};
+
+// Contract Interaction Pattern with Address Injection
+const ContractInteraction = () => {
+  const contractAddress = useContractAddress();
+
+  // Show warning if contract not deployed
+  if (!contractAddress) {
+    return <ContractWarning contractAddress={contractAddress} />;
+  }
+
+  const executeContract = async (functionName, args = []) => {
     // Use injected contract address for all interactions
     const result = await fcl.mutate({
       cadence: \`
-        import [AppName]Contract from \${contractAddress}
+        import AppContract from \${contractAddress}
 
         transaction() {
+          prepare(signer: auth(Storage) &Account) {
+            // Prepare authorization if needed
+          }
           execute {
-            [AppName]Contract.[relevantFunction]()
+            AppContract.\${functionName}()
           }
         }
       \`,
-      args: (arg, t) => []
+      args: (arg, t) => args
     });
 
     return result;
   };
 
   return (
-    <button onClick={executeContract}>
-      {contractAddress ? 'Execute Contract' : 'Deploy Contract First'}
-    </button>
+    <div>
+      <button onClick={() => executeContract('mintItem')}>Mint Item</button>
+      <button onClick={() => executeContract('buyItem')}>Buy Item</button>
+      <button onClick={() => executeContract('sellItem')}>Sell Item</button>
+    </div>
   );
 };
 \`\`\`
@@ -272,17 +492,29 @@ After Phase 2 deployment, verify:
 ### CRITICAL REQUIREMENTS:
 
 ❌ **DO NOT**:
+- Create multiple smart contracts - use ONE comprehensive contract
 - Embed deployment logic in the generated frontend
 - Attempt to deploy contracts within the mini-app
 - Hardcode contract addresses in the generated code
 - Create deployment interfaces within the generated app
+- Allow mini-app to function without contract deployment
 
 ✅ **DO**:
-- Generate smart contracts separately from deployment
-- Use placeholder contract addresses that get replaced post-deployment
-- Create contract interaction components that accept injected addresses
-- Ensure all contract calls are address-parameterized
+- Generate ONE comprehensive smart contract with ALL functions (mint, buy, sell, transfer, etc.)
+- Show contract warning screen when parent contract is not deployed
+- Use contract address injection pattern for all blockchain interactions
+- Ensure ALL contract functions are utilized in the frontend
+- Create comprehensive blockchain interaction service layer
+- Follow Flow best practices folder structure
+- Use proper Cadence 1.0 authorization patterns
 - Design for seamless address injection after deployment
+
+### SMART CONTRACT FUNCTION UTILIZATION:
+- **EVERY function** in the deployed smart contract MUST be used in the frontend
+- Create UI components for: mint, buy, sell, transfer, query, update operations
+- Include proper error handling for all contract interactions
+- Implement loading states for all blockchain operations
+- Add success/failure feedback for all transactions
 
 This three-phase architecture ensures secure, scalable Web3 application development with proper separation of concerns.
 `;

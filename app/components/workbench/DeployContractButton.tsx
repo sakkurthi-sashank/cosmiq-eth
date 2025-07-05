@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { useFlowAuth } from '../../lib/contexts/FlowAuthContext';
 import { workbenchStore } from '../../lib/stores/workbench';
@@ -6,6 +6,7 @@ import { getCadenceFiles } from '../../utils/getLanguageFromExtension';
 import { Button } from '../ui/Button';
 import { LoadingDots } from '../ui/LoadingDots';
 import { fcl } from '../../lib/flow-config';
+import { chatStore } from '../../lib/stores/chat';
 
 interface DeployContractButtonProps {
   className?: string;
@@ -14,6 +15,8 @@ interface DeployContractButtonProps {
 export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ className }) => {
   const { user, isAuthenticated } = useFlowAuth();
   const files = useStore(workbenchStore.files);
+  // Get current chat ID for localStorage key
+  const chatId = 'current_chat'; // You can replace this with actual chat ID from your store
   const [isDeploying, setIsDeploying] = useState(false);
   const [deploymentStatus, setDeploymentStatus] = useState<'idle' | 'deploying' | 'success' | 'error'>('idle');
   const [deploymentMessage, setDeploymentMessage] = useState<string>('');
@@ -23,11 +26,6 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
   const cadenceFiles = useMemo(() => {
     return getCadenceFiles(files);
   }, [files]);
-
-  // Don't show the button if no Cadence files are present
-  if (cadenceFiles.length === 0 || !isAuthenticated) {
-    return null;
-  }
 
   // Function to extract contract name from Cadence code
   const extractContractName = (contractCode: string): string => {
@@ -47,10 +45,111 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
     return 'DeployedContract';
   };
 
+  // Function to get deployment status from localStorage for current chat
+  const getDeploymentStatus = (chatId: string, userAddress: string): boolean => {
+    try {
+      const key = `contract_deployed_${chatId}_${userAddress}`;
+      const deployed = localStorage.getItem(key);
+      return deployed === 'true';
+    } catch (error) {
+      console.warn('Failed to get deployment status:', error);
+      return false;
+    }
+  };
+
+  // Function to store deployment status in localStorage for current chat
+  const storeDeploymentForChat = (chatId: string, userAddress: string, deployed: boolean, contractName?: string) => {
+    try {
+      const key = `contract_deployed_${chatId}_${userAddress}`;
+      localStorage.setItem(key, deployed.toString());
+
+      // Also store contract details for reference
+      if (deployed && contractName) {
+        const detailsKey = `contract_details_${chatId}_${userAddress}`;
+        localStorage.setItem(
+          detailsKey,
+          JSON.stringify({
+            contractName,
+            deployedAt: Date.now(),
+            address: userAddress,
+          }),
+        );
+      }
+    } catch (error) {
+      console.warn('Failed to store deployment status:', error);
+    }
+  };
+
+  // Get contract details from localStorage
+  const getContractDetails = (chatId: string, userAddress: string) => {
+    try {
+      const key = `contract_details_${chatId}_${userAddress}`;
+      const details = localStorage.getItem(key);
+      return details ? JSON.parse(details) : null;
+    } catch (error) {
+      console.warn('Failed to get contract details:', error);
+      return null;
+    }
+  };
+
+  // Effect to check deployment status from localStorage when user connects or chat changes
+  useEffect(() => {
+    if (!user?.addr || !isAuthenticated || !chatId) return;
+
+    console.log('🔍 Checking deployment status for chat:', chatId, 'user:', user.addr);
+
+    // Check if contract is already deployed for this chat and user
+    const isDeployed = getDeploymentStatus(chatId, user.addr);
+
+    if (isDeployed) {
+      const contractDetails = getContractDetails(chatId, user.addr);
+      console.log('✅ Contract already deployed for this chat:', contractDetails);
+
+      setDeploymentStatus('success');
+      setDeployedAddress(user.addr);
+      setDeploymentMessage(
+        contractDetails?.contractName
+          ? `${contractDetails.contractName} is already deployed for this chat`
+          : 'Smart contract is already deployed for this chat',
+      );
+    } else {
+      console.log('📄 No contract deployed for this chat yet');
+      setDeploymentStatus('idle');
+      setDeploymentMessage('');
+      setDeployedAddress('');
+    }
+  }, [user?.addr, isAuthenticated, chatId]);
+
+  // Don't show the button if no Cadence files are present
+  if (cadenceFiles.length === 0 || !isAuthenticated) {
+    return null;
+  }
+
   const handleDeploy = async () => {
     if (!user?.addr) {
       setDeploymentMessage('Please connect your Flow wallet first');
       setDeploymentStatus('error');
+      return;
+    }
+
+    // Get the first Cadence file content for deployment
+    const primaryContract = cadenceFiles[0];
+    const contractFile = files[primaryContract];
+
+    if (!contractFile || contractFile.type !== 'file') {
+      setDeploymentMessage('Contract file not found');
+      setDeploymentStatus('error');
+      return;
+    }
+
+    // Extract the actual contract name from the code
+    const contractName = extractContractName(contractFile.content);
+
+    // Check if contract is already deployed for this chat
+    if (getDeploymentStatus(chatId, user.addr)) {
+      setDeploymentMessage(`${contractName} is already deployed for this chat`);
+      setDeploymentStatus('success');
+      setDeployedAddress(user.addr);
       return;
     }
 
@@ -63,20 +162,9 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
       console.log('🚀 Initiating smart contract deployment...');
       console.log('📄 Cadence files found:', cadenceFiles);
       console.log('👤 Deploying with account:', user.addr);
-
-      // Get the first Cadence file content for deployment
-      const primaryContract = cadenceFiles[0];
-      const contractFile = files[primaryContract];
-
-      if (!contractFile || contractFile.type !== 'file') {
-        throw new Error('Contract file not found');
-      }
+      console.log('📝 Contract name:', contractName);
 
       setDeploymentMessage('Reading smart contract code...');
-
-      // Extract the actual contract name from the code
-      const contractName = extractContractName(contractFile.content);
-      console.log('📝 Extracted contract name:', contractName);
 
       // Log contract content for verification
       console.log('📜 Contract code:', contractFile.content);
@@ -120,6 +208,9 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
 
       setDeploymentStatus('success');
       setDeploymentMessage(`${contractName} successfully deployed to ${contractAddress}`);
+
+      // Store deployment status for this chat
+      storeDeploymentForChat(chatId, user.addr, true, contractName);
 
       // Here's where the address would be automatically injected into frontend components
       // This is handled by the parent CosmIQ app according to the three-phase workflow
@@ -206,7 +297,7 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
             disabled={isDeploying || deploymentStatus === 'success'}
             className={`bg-gradient-to-r ${getStatusColor()} hover:opacity-90 text-white font-semibold px-6 py-2 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100`}
           >
-            {isDeploying ? 'Deploying...' : deploymentStatus === 'success' ? 'Deployed' : 'Deploy Contract'}
+            {isDeploying ? 'Deploying...' : deploymentStatus === 'success' ? 'Already Deployed' : 'Deploy Contract'}
           </Button>
         </div>
       </div>

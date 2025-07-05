@@ -13,23 +13,25 @@ const FLOW_INTEGRATION_INSTRUCTIONS = `
 
 ### CRITICAL: Every application MUST follow the three-phase Web3 deployment workflow
 
-🔄 **PHASE 1: SMART CONTRACT GENERATION**
-- Generate secure, production-ready Cadence smart contracts
-- DO NOT embed deployment logic within the generated frontend
+🔄 **PHASE 1: SINGLE COMPREHENSIVE SMART CONTRACT GENERATION**
+- Generate ONE comprehensive Cadence smart contract containing ALL application functions
+- Include all business logic: create, read, update, delete, mint, buy, sell, transfer operations
+- DO NOT create multiple contracts - consolidate everything into one contract
 - Smart contracts are generated separately from the application
-- Contracts should be modular and deployment-agnostic
+- Contract should be modular and deployment-agnostic
 
-🚀 **PHASE 2: DEPLOYMENT EXECUTION**
-- Deployment is handled by the parent CosmIQ app, NOT the mini-app
+🚀 **PHASE 2: PARENT APP DEPLOYMENT EXECUTION**
+- Deployment is handled EXCLUSIVELY by the parent CosmIQ app, NOT the mini-app
 - User clicks "Deploy Contract" button above the application panel
 - Deployment uses user's connected Flow wallet credentials
 - Real-time deployment status tracking via parent app
+- Mini-app NEVER attempts to deploy contracts itself
 
-🔗 **PHASE 3: ADDRESS PROPAGATION & INTEGRATION**
-- Deployed contract address is automatically captured
-- Address is injected into frontend components where needed
-- All contract interactions use the deployed address
-- Seamless integration without manual code modification
+🔗 **PHASE 3: ADDRESS INJECTION & INTEGRATION**
+- Deployed contract address is automatically captured by parent app
+- Address is injected into ALL frontend components that need blockchain functionality
+- All contract interactions (mint, buy, sell, transfer, etc.) use the injected deployed address
+- Complete seamless integration without manual code modification
 
 ### FLOW SETUP REQUIREMENTS:
 
@@ -44,7 +46,46 @@ CRITICAL: All transactions must use proper authorization entitlements:
 - **General Transactions**: \`auth(Storage) &Account\` for most user transactions
 - **Resource Operations**: Proper entitlements based on resource requirements
 
-#### 2. Smart Contract Generation (Phase 1)
+#### 3. Flow Project Structure (Based on Flow Best Practices)
+
+\`\`\`
+project-root/
+├── cadence/                    # All Cadence blockchain code
+│   ├── contracts/             # Smart contract (.cdc files)
+│   │   └── AppContract.cdc    # Single comprehensive contract
+│   ├── scripts/               # Read-only blockchain queries
+│   │   ├── get_items.cdc
+│   │   ├── get_balance.cdc
+│   │   └── get_metadata.cdc
+│   └── transactions/          # State-changing blockchain operations
+│       ├── setup_account.cdc
+│       ├── mint_item.cdc
+│       ├── buy_item.cdc
+│       ├── sell_item.cdc
+│       └── transfer_item.cdc
+├── src/
+│   ├── components/
+│   │   ├── flow/              # Flow-specific components
+│   │   │   ├── FlowAuthContext.tsx
+│   │   │   ├── AuthGuard.tsx
+│   │   │   ├── WalletLogin.tsx
+│   │   │   └── ContractWarning.tsx
+│   │   └── ui/                # General UI components
+│   ├── lib/
+│   │   ├── flow-config.ts     # FCL configuration
+│   │   ├── flow-types.ts      # Flow-related TypeScript types
+│   │   └── contract-service.ts # Contract interaction service
+│   ├── hooks/
+│   │   ├── useFlowAuth.ts     # Flow authentication hook
+│   │   ├── useContract.ts     # Contract interaction hook
+│   │   └── useContractAddress.ts # Contract address management
+│   └── services/
+│       └── blockchain.ts      # Blockchain service layer
+├── flow.json                  # Flow configuration file
+└── package.json
+\`\`\`
+
+#### 4. Smart Contract Generation (Phase 1)
 Based on the application context, create a relevant Cadence smart contract:
 - **E-commerce**: Product catalog, payment processing
 - **Social Media**: Post creation, user profiles, interactions
@@ -58,43 +99,94 @@ Based on the application context, create a relevant Cadence smart contract:
 1. **WalletLogin.tsx**: Flow wallet authentication interface
 2. **FlowAuthContext.tsx**: Authentication state management
 3. **AuthGuard.tsx**: Protected route wrapper
-4. **Contract Interface**: Component for contract interaction (address injected post-deployment)
+4. **ContractWarning.tsx**: Warning screen when parent contract is not deployed
+5. **Contract Interface Components**: All components that need blockchain functionality (address injected post-deployment)
+6. **useContractAddress.ts**: Hook to manage contract address injection
+7. **Contract Service Layer**: Centralized blockchain interaction service
 
 ### CONTRACT INTERACTION PATTERN:
 
 \`\`\`javascript
-// Contract interactions using injected address
-const ContractInteraction = ({ contractAddress }) => {
-  const executeContract = async () => {
-    if (!contractAddress) {
-      console.error('Contract address not available - deployment required');
-      return;
-    }
+// Contract Warning Component Pattern
+const ContractWarning = ({ contractAddress }) => {
+  if (contractAddress) {
+    return null; // Hide warning when contract is deployed
+  }
 
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md text-center">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Contract Not Deployed</h2>
+        <p className="text-gray-600 mb-6">
+          This mini-app requires the parent contract to be deployed first.
+          Please use the "Deploy Contract" button above to deploy the smart contract.
+        </p>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <p className="text-sm text-yellow-800">
+            💡 Once deployed, this warning will disappear and the app will be fully functional.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Contract Address Hook Pattern
+const useContractAddress = () => {
+  const [contractAddress, setContractAddress] = useState(null);
+
+  useEffect(() => {
+    // Listen for contract address injection from parent app
+    const handleAddressInjection = (event) => {
+      if (event.data.type === 'CONTRACT_ADDRESS_INJECTION') {
+        setContractAddress(event.data.address);
+      }
+    };
+
+    window.addEventListener('message', handleAddressInjection);
+    return () => window.removeEventListener('message', handleAddressInjection);
+  }, []);
+
+  return contractAddress;
+};
+
+// Contract Interaction Pattern with Address Injection
+const ContractInteraction = () => {
+  const contractAddress = useContractAddress();
+
+  // Show warning if contract not deployed
+  if (!contractAddress) {
+    return <ContractWarning contractAddress={contractAddress} />;
+  }
+
+  const executeContract = async (functionName, args = []) => {
     // Use injected contract address for all interactions
     const result = await fcl.mutate({
       cadence: \`
-        import [AppName]Contract from \${contractAddress}
+        import AppContract from \${contractAddress}
 
         transaction() {
           prepare(signer: auth(Storage) &Account) {
             // Prepare authorization if needed
           }
           execute {
-            [AppName]Contract.[relevantFunction]()
+            AppContract.\${functionName}()
           }
         }
       \`,
-      args: (arg, t) => []
+      args: (arg, t) => args
     });
 
     return result;
   };
 
   return (
-    <button onClick={executeContract}>
-      {contractAddress ? 'Execute Contract' : 'Deploy Contract First'}
-    </button>
+    <div>
+      <button onClick={() => executeContract('mintItem')}>Mint Item</button>
+      <button onClick={() => executeContract('buyItem')}>Buy Item</button>
+      <button onClick={() => executeContract('sellItem')}>Sell Item</button>
+    </div>
   );
 };
 \`\`\`
@@ -110,17 +202,29 @@ Every smart contract function must include:
 ### CRITICAL REQUIREMENTS:
 
 ❌ **DO NOT**:
+- Create multiple smart contracts - use ONE comprehensive contract
 - Embed deployment logic in the generated frontend
 - Attempt to deploy contracts within the mini-app
 - Hardcode contract addresses in the generated code
 - Create deployment interfaces within the generated app
+- Allow mini-app to function without contract deployment
 
 ✅ **DO**:
-- Generate smart contracts separately from deployment
-- Use placeholder contract addresses that get replaced post-deployment
-- Create contract interaction components that accept injected addresses
-- Ensure all contract calls are address-parameterized
+- Generate ONE comprehensive smart contract with ALL functions (mint, buy, sell, transfer, etc.)
+- Show contract warning screen when parent contract is not deployed
+- Use contract address injection pattern for all blockchain interactions
+- Ensure ALL contract functions are utilized in the frontend
+- Create comprehensive blockchain interaction service layer
+- Follow Flow best practices folder structure
+- Use proper Cadence 1.0 authorization patterns
 - Design for seamless address injection after deployment
+
+### SMART CONTRACT FUNCTION UTILIZATION:
+- **EVERY function** in the deployed smart contract MUST be used in the frontend
+- Create UI components for: mint, buy, sell, transfer, query, update operations
+- Include proper error handling for all contract interactions
+- Implement loading states for all blockchain operations
+- Add success/failure feedback for all transactions
 
 This three-phase architecture ensures secure, scalable Web3 application development with proper separation of concerns.
 `;

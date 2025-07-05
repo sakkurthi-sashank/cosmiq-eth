@@ -15,23 +15,25 @@ const FLOW_INTEGRATION_INSTRUCTIONS = `
 
 ### CRITICAL: Every application MUST follow the three-phase Web3 deployment workflow
 
-🔄 **PHASE 1: SMART CONTRACT GENERATION**
-- Generate secure, production-ready Cadence smart contracts
-- DO NOT embed deployment logic within the generated frontend
+🔄 **PHASE 1: SINGLE COMPREHENSIVE SMART CONTRACT GENERATION**
+- Generate ONE comprehensive Cadence smart contract containing ALL application functions
+- Include all business logic: create, read, update, delete, mint, buy, sell, transfer operations
+- DO NOT create multiple contracts - consolidate everything into one contract
 - Smart contracts are generated separately from the application
-- Contracts should be modular and deployment-agnostic
+- Contract should be modular and deployment-agnostic
 
-🚀 **PHASE 2: DEPLOYMENT EXECUTION**
-- Deployment is handled by the parent CosmIQ app, NOT the mini-app
+🚀 **PHASE 2: PARENT APP DEPLOYMENT EXECUTION**
+- Deployment is handled EXCLUSIVELY by the parent CosmIQ app, NOT the mini-app
 - User clicks "Deploy Contract" button above the application panel
 - Deployment uses user's connected Flow wallet credentials
 - Real-time deployment status tracking via parent app
+- Mini-app NEVER attempts to deploy contracts itself
 
-🔗 **PHASE 3: ADDRESS PROPAGATION & INTEGRATION**
-- Deployed contract address is automatically captured
-- Address is injected into frontend components where needed
-- All contract interactions use the deployed address
-- Seamless integration without manual code modification
+🔗 **PHASE 3: ADDRESS INJECTION & INTEGRATION**
+- Deployed contract address is automatically captured by parent app
+- Address is injected into ALL frontend components that need blockchain functionality
+- All contract interactions (mint, buy, sell, transfer, etc.) use the injected deployed address
+- Complete seamless integration without manual code modification
 
 ### FLOW SETUP REQUIREMENTS:
 

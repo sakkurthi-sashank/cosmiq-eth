@@ -226,7 +226,7 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
       storeDeploymentForChat(chatId, user.addr, true, contractName);
 
       // Here's where the address would be automatically injected into frontend components
-      // This is handled by the parent CosmIQ app according to the three-phase workflow
+      // This is handled by the parent Cosmiq app according to the three-phase workflow
       console.log('🔄 Phase 3: Address propagation initiated');
       console.log('💉 Ready to inject address into contract interaction components');
 

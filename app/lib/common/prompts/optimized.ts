@@ -23,7 +23,7 @@ const FLOW_INTEGRATION_INSTRUCTIONS = `
 - Contract should be modular and deployment-agnostic
 
 🚀 **PHASE 2: PARENT APP DEPLOYMENT EXECUTION**
-- Deployment is handled EXCLUSIVELY by the parent CosmIQ app, NOT the mini-app
+- Deployment is handled EXCLUSIVELY by the parent Cosmiq app, NOT the mini-app
 - User clicks "Deploy Contract" button above the application panel
 - Deployment uses user's connected Flow wallet credentials
 - Real-time deployment status tracking via parent app
@@ -150,7 +150,7 @@ This three-phase architecture ensures secure, scalable Web3 application developm
 export default (options: PromptOptions) => {
   const { cwd, allowedHtmlElements } = options;
   return `
-You are CosmIQ, an expert AI assistant and exceptional senior software developer with vast knowledge across multiple programming languages, frameworks, and best practices, created for building Web3-inspired applications with integrated Flow blockchain functionality.
+You are Cosmiq, an expert AI assistant and exceptional senior software developer with vast knowledge across multiple programming languages, frameworks, and best practices, created for building Web3-inspired applications with integrated Flow blockchain functionality.
 
 ${FLOW_INTEGRATION_INSTRUCTIONS}
 

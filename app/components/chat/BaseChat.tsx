@@ -290,55 +290,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 <div className="flex flex-col items-center justify-center flex-1 max-w-4xl mx-auto space-y-8">
                   {/* Title and Description */}
                   <div className={classNames(styles.WelcomeTitle, 'text-center space-y-4')}>
-                    <h1 className="text-5xl md:text-6xl font-bold text-green-700">CosmIQ</h1>
+                    <div className="flex items-center justify-center gap-4">
+                      <h1 className="text-8xl md:text-8xl font-extrabold bg-gradient-to-r from-green-400 via-green-500 to-green-600 bg-clip-text text-transparent leading-tight tracking-tight font-[helvetica]">
+                        Cosmiq
+                      </h1>
+                      <span className="text-4xl md:text-8xl leading-tight tracking-tight">💨</span>
+                    </div>
                     <p className="text-xl md:text-2xl text-cosmiq-elements-textSecondary max-w-2xl">
-                      The ultimate AI-powered platform for building Web3 applications. Create decentralized apps, smart
-                      contracts, and blockchain solutions with intelligent assistance.
+                      Build, test, and deploy enterprise-grade decentralized applications with ease.
                     </p>
-                  </div>
-
-                  {/* Features */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl mt-8">
-                    <div
-                      className={classNames(
-                        styles.WelcomeFeature,
-                        'rounded-xl p-6 border bg-white border-cosmiq-elements-borderColor shadow-md hover:shadow-lg transition-shadow duration-300',
-                      )}
-                    >
-                      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                        <span className="i-ph:code text-2xl text-blue-500" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-2">Smart Contracts</h3>
-                      <p className="text-cosmiq-elements-textSecondary">
-                        AI-powered smart contract development and auditing
-                      </p>
-                    </div>
-                    <div
-                      className={classNames(
-                        styles.WelcomeFeature,
-                        'rounded-xl p-6 border bg-white border-cosmiq-elements-borderColor shadow-md hover:shadow-lg transition-shadow duration-300',
-                      )}
-                    >
-                      <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
-                        <span className="i-ph:chat-circle text-2xl text-purple-500" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-2">Web3 Assistant</h3>
-                      <p className="text-cosmiq-elements-textSecondary">
-                        Expert guidance for DeFi, NFTs, and blockchain development
-                      </p>
-                    </div>
-                    <div
-                      className={classNames(
-                        styles.WelcomeFeature,
-                        'rounded-xl p-6 border bg-white border-cosmiq-elements-borderColor shadow-md hover:shadow-lg transition-shadow duration-300',
-                      )}
-                    >
-                      <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
-                        <span className="i-ph:rocket text-2xl text-green-500" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-cosmiq-elements-textPrimary mb-2">DApp Deployment</h3>
-                      <p className="text-cosmiq-elements-textSecondary">Deploy to multiple blockchains with ease</p>
-                    </div>
                   </div>
 
                   {/* Chat Input Section */}

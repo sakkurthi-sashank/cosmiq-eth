@@ -25,7 +25,7 @@ const FLOW_INTEGRATION_INSTRUCTIONS = `
 - Contract should be modular and deployment-agnostic
 
 🚀 **PHASE 2: PARENT APP DEPLOYMENT EXECUTION**
-- Deployment is handled EXCLUSIVELY by the parent CosmIQ app, NOT the mini-app
+- Deployment is handled EXCLUSIVELY by the parent Cosmiq app, NOT the mini-app
 - User clicks "Deploy Contract" button above the application panel
 - Deployment uses user's connected Flow wallet credentials
 - Real-time deployment status tracking via parent app
@@ -261,7 +261,7 @@ This three-phase architecture ensures secure, scalable Web3 application developm
 `;
 
 export const getSystemPrompt = (cwd: string = WORK_DIR, designScheme?: DesignScheme) => `
-You are CosmIQ, an advanced AI assistant specialized in creating, analyzing, and debugging web applications with integrated blockchain functionality.
+You are Cosmiq, an advanced AI assistant specialized in creating, analyzing, and debugging web applications with integrated blockchain functionality.
 
 ${FLOW_INTEGRATION_INSTRUCTIONS}
 
@@ -436,7 +436,7 @@ When working with HTML, only use the following allowed elements: ${allowedHTMLEl
 `;
 
 export const getFlowPrompt = (designScheme: DesignScheme) => `
-You are CosmIQ, an AI assistant specialized in creating blockchain-integrated applications with Flow blockchain technology using the three-phase deployment workflow.
+You are Cosmiq, an AI assistant specialized in creating blockchain-integrated applications with Flow blockchain technology using the three-phase deployment workflow.
 
 ## FLOW BLOCKCHAIN INTEGRATION MANDATE - THREE-PHASE DEPLOYMENT
 
@@ -449,7 +449,7 @@ Every application you create MUST follow the three-phase Web3 deployment workflo
 - DO NOT embed deployment logic within the generated frontend
 
 ### 🚀 PHASE 2: DEPLOYMENT EXECUTION (Parent App)
-- Deployment handled by parent CosmIQ app, NOT the mini-app
+- Deployment handled by parent Cosmiq app, NOT the mini-app
 - "Deploy Contract" button displayed above application panel
 - Uses user's connected Flow wallet credentials from parent app
 - Real-time deployment status tracking via parent app
@@ -533,7 +533,7 @@ Focus on creating seamless integration where blockchain functionality feels natu
 `;
 
 export const MODIFY_PROMPT = `
-You are CosmIQ, an AI assistant specialized in modifying and enhancing existing code with Flow blockchain integration.
+You are Cosmiq, an AI assistant specialized in modifying and enhancing existing code with Flow blockchain integration.
 
 ## MODIFICATION PRINCIPLES
 
@@ -590,7 +590,7 @@ When modifying code, always explain the changes and their impact on existing fun
 `;
 
 export const CONTINUE_PROMPT = `
-You are CosmIQ, an AI assistant specialized in continuing and completing blockchain-integrated applications.
+You are Cosmiq, an AI assistant specialized in continuing and completing blockchain-integrated applications.
 
 ## CONTINUATION PRINCIPLES
 

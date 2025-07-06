@@ -4,8 +4,6 @@
 
 https://github.com/user-attachments/assets/061394b7-9399-4c7f-a54c-9cffc73949e2
 
-
-
 **A next-generation AI-powered development platform that generates full-stack Web3 applications with integrated smart contracts from natural language prompts, running entirely in your browser with integrated Flow blockchain functionality and advanced knowledge graph intelligence.**
 
 ## 🚀 **Overview**
@@ -234,6 +232,9 @@ VITE_DEBUG_MODE=false
 VITE_ENABLE_ANALYTICS=true
 ```
 
+### System Architecture
+
+<img width="875" alt="Screenshot 2025-07-06 at 4 52 54 AM" src="https://github.com/user-attachments/assets/d314288e-fdba-4f87-bbac-261e2a5b78b9" />
 
 ## 🛣️ **Roadmap**
 

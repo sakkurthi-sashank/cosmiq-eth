@@ -172,9 +172,15 @@ export default function Landing() {
             </Button>
           </div>
 
-          {/* video.mp4 */}
           <div className="max-w-3xl mx-auto mb-12">
-            <video className="w-full rounded-2xl shadow-lg" controls poster="/images/hero-poster.png" src="/video.mp4">
+            <video
+              className="w-full rounded-2xl shadow-lg"
+              controls
+              autoPlay
+              muted
+              poster="/images/hero-poster.png"
+              src="/video.mp4"
+            >
               Your browser does not support the video tag.
             </video>
           </div>

@@ -1,5 +1,10 @@
 # Cosmiq - Advanced AI-Powered Web3 Development Platform
-![image](https://github.com/user-attachments/assets/72d8f226-44f0-4179-b135-a7524d2114aa)
+
+
+
+https://github.com/user-attachments/assets/061394b7-9399-4c7f-a54c-9cffc73949e2
+
+
 
 **A next-generation AI-powered development platform that generates full-stack Web3 applications with integrated smart contracts from natural language prompts, running entirely in your browser with integrated Flow blockchain functionality and advanced knowledge graph intelligence.**
 

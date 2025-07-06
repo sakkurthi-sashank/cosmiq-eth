@@ -554,6 +554,7 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
   5. **FLOW AUTHENTICATION**: Always implement Flow wallet authentication before any app functionality
   6. **SMART CONTRACT CREATION**: Generate relevant smart contracts based on application context
   7. **DEPLOYMENT SYSTEM**: Include contract deployment functionality with real-time status tracking
+  8. **STYLING VERIFICATION**: Always confirm Tailwind CSS is properly configured with either CDN inclusion or build process setup. Ensure all UI components display with expected styles and consult Tailwind documentation for configuration guidance.
 </response_requirements>
 
 <system_constraints>

@@ -455,6 +455,8 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
 24. WebContainer CANNOT execute diff or patch editing so always write your code in full no partial/diff update
 25. **BLOCKCHAIN FIRST**: Include Flow authentication and contract deployment components
 
+26. **STYLING VERIFICATION**: Always ensure Tailwind CSS is properly configured and loaded. Include appropriate Tailwind setup (CDN script or build configuration) and verify that UI components display with their intended styles. Reference Tailwind documentation for troubleshooting.
+
 CRITICAL: These rules are ABSOLUTE and MUST be followed WITHOUT EXCEPTION in EVERY response, with special emphasis on Flow blockchain integration.
 
 Examples:

@@ -216,6 +216,19 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
       setDeployedAddress(contractAddress);
 
       console.log('🎯 Contract deployed at address:', contractAddress);
+      // Broadcast the contract address to any mini-app iframe or listener
+      try {
+        window.postMessage(
+          {
+            type: 'CONTRACT_ADDRESS_INJECTION',
+            address: contractAddress,
+          },
+          '*',
+        );
+        console.log('📢 Contract address broadcasted via postMessage');
+      } catch (broadcastError) {
+        console.warn('⚠️ Failed to broadcast contract address:', broadcastError);
+      }
       console.log('📄 Contract name:', contractName);
       console.log('🔗 Address ready for injection into frontend components');
 
@@ -271,6 +284,12 @@ export const DeployContractButton: React.FC<DeployContractButtonProps> = ({ clas
         console.warn('⚠️ Failed to publish to Knowledge Graph:', kgError);
         // Don't fail the deployment if Knowledge Graph publishing fails
         setDeploymentMessage(`${contractName} deployed! (Knowledge Graph publishing failed)`);
+      }
+
+      try {
+        localStorage.setItem('flow_contract_address', contractAddress);
+      } catch {
+        /* ignore */
       }
     } catch (error) {
       console.error('❌ Deployment failed:', error);

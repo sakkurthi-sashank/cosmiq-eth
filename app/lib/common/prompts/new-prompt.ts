@@ -74,7 +74,7 @@ project-root/
 │   │   │   ├── FlowAuthContext.tsx
 │   │   │   ├── AuthGuard.tsx
 │   │   │   ├── WalletLogin.tsx
-│   │   │   └── ContractWarning.tsx
+│   │   └── ContractProvider.tsx
 │   │   └── ui/                # General UI components
 │   ├── lib/
 │   │   ├── flow-config.ts     # FCL configuration
@@ -330,7 +330,7 @@ access(all) contract [AppName]Contract {
 1. **WalletLogin.tsx**: Flow wallet authentication interface
 2. **FlowAuthContext.tsx**: Authentication state management
 3. **AuthGuard.tsx**: Protected route wrapper
-4. **ContractWarning.tsx**: Warning screen when parent contract is not deployed
+4. **ContractProvider.tsx**: Provides contract context and address injection
 5. **Contract Interface Components**: All components that need blockchain functionality (address injected post-deployment)
 6. **useContractAddress.ts**: Hook to manage contract address injection
 7. **Contract Service Layer**: Centralized blockchain interaction service
@@ -388,44 +388,62 @@ transaction() {
 ### CONTRACT INTERACTION PATTERN:
 
 \`\`\`javascript
-// Contract Warning Component Pattern
-const ContractWarning = ({ contractAddress }) => {
-  if (contractAddress) {
-    return null; // Hide warning when contract is deployed
-  }
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md text-center">
-        <div className="text-6xl mb-4">⚠️</div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Contract Not Deployed</h2>
-        <p className="text-gray-600 mb-6">
-          This mini-app requires the parent contract to be deployed first.
-          Please use the "Deploy Contract" button above to deploy the smart contract.
-        </p>
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p className="text-sm text-yellow-800">
-            💡 Once deployed, this warning will disappear and the app will be fully functional.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
+// Contract address management handled via hooks and fallback logic; no separate warning component needed
 
 // Contract Address Hook Pattern
 const useContractAddress = () => {
   const [contractAddress, setContractAddress] = useState(null);
 
   useEffect(() => {
-    // Listen for contract address injection from parent app
+    // 1️⃣  Load any address already persisted by the Workbench in localStorage
+    try {
+      const storedKey = Object.keys(localStorage).find((k) => k.startsWith('contract_details_'));
+      if (storedKey) {
+        const details = JSON.parse(localStorage.getItem(storedKey));
+        if (details?.address) {
+          setContractAddress(details.address);
+          console.log('📦 Contract address loaded from localStorage:', details.address);
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load contract address from localStorage', e);
+    }
+
+    // 2️⃣  Listen for contract address injection messages from parent app
     const handleAddressInjection = (event) => {
-      if (event.data.type === 'CONTRACT_ADDRESS_INJECTION') {
+      if (event.data && event.data.type === 'CONTRACT_ADDRESS_INJECTION') {
         setContractAddress(event.data.address);
+        console.log('📨 Contract address injected via postMessage:', event.data.address);
       }
     };
 
     window.addEventListener('message', handleAddressInjection);
+
+    // 3️⃣  Fallback: look for any contract_deployed_<app>_<addr> key set to 'true'
+    if (!contractAddress) {
+      try {
+        const deployedKey = Object.keys(localStorage).find(
+          (k) => k.startsWith('contract_deployed_') && localStorage.getItem(k) === 'true',
+        );
+        if (deployedKey) {
+          const parts = deployedKey.split('_');
+          const addr = parts[parts.length - 1];
+          if (addr?.startsWith('0x')) {
+            setContractAddress(addr);
+            console.log('🔑 Contract address derived from deployment key:', addr);
+          }
+        }
+      } catch (e) {
+        console.warn('Failed fallback lookup for contract_deployed key', e);
+      }
+    }
+
+    // 4️⃣  Ultimate fallback constant (shared test address)
+    if (!contractAddress) {
+      setContractAddress('0xafed809ec4e02497');
+      console.log('🛑 Using default fallback contract address 0xafed809ec4e02497');
+    }
+
     return () => window.removeEventListener('message', handleAddressInjection);
   }, []);
 
@@ -438,7 +456,8 @@ const ContractInteraction = () => {
 
   // Show warning if contract not deployed
   if (!contractAddress) {
-    return <ContractWarning contractAddress={contractAddress} />;
+    console.error('Contract address not available');
+    return null; // gracefully skip rendering until address is set
   }
 
   const executeContract = async (functionName, args = []) => {
@@ -501,7 +520,6 @@ After Phase 2 deployment, verify:
 
 ✅ **DO**:
 - Generate ONE comprehensive smart contract with ALL functions (mint, buy, sell, transfer, etc.)
-- Show contract warning screen when parent contract is not deployed
 - Use contract address injection pattern for all blockchain interactions
 - Ensure ALL contract functions are utilized in the frontend
 - Create comprehensive blockchain interaction service layer
@@ -819,6 +837,7 @@ ${FLOW_INTEGRATION_INSTRUCTIONS}
 <cosmiqAction type="file" filePath="src/lib/flow-config.js">
 import { config } from '@onflow/fcl';
 
+// Configure for Flow Testnet
 config({
   'accessNode.api': 'https://rest-testnet.onflow.org',
   'discovery.wallet': 'https://fcl-discovery.onflow.org/testnet/authn',

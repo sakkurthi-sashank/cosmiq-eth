@@ -11,6 +11,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ClientOnly } from 'remix-utils/client-only';
 import { FlowAuthProvider } from './lib/contexts/FlowAuthContext';
 import { initializeFlow } from './lib/flow-config';
+import { ContractProvider } from './components/flow/ContractProvider';
 
 import reactToastifyStyles from 'react-toastify/dist/ReactToastify.css?url';
 import globalStyles from './styles/index.scss?url';
@@ -102,9 +103,11 @@ export default function App() {
 
   return (
     <FlowAuthProvider>
-      <Layout>
-        <Outlet />
-      </Layout>
+      <ContractProvider>
+        <Layout>
+          <Outlet />
+        </Layout>
+      </ContractProvider>
     </FlowAuthProvider>
   );
 }

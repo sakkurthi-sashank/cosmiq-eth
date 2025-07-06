@@ -7,7 +7,7 @@ export const flowConfig = {
   'discovery.wallet': 'https://fcl-discovery.onflow.org/testnet/authn',
   'flow.network': 'testnet',
   'app.detail.title': 'CosmiqETH',
-  'app.detail.icon': 'https://cosmiq-eth.vercel.app/favicon.svg',
+  'app.detail.icon': 'https://cosmiq-eth.vercel.app/favicon.ico',
   'app.detail.description':
     'A Web3-inspired builder platform that generates working web applications from natural language prompts',
   'wallet.autoConnect': true,
